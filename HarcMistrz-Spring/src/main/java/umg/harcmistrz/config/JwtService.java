@@ -3,6 +3,7 @@ package umg.harcmistrz.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -33,9 +34,9 @@ public class JwtService {
         return createToken(claims, email);
     }
 
-    public Boolean isTokenValid(String token, String email) {
+    public Boolean isTokenValid(String token, UserDetails userDetails) {
         final String extractedEmail = extractEmail(token);
-        return (extractedEmail.equals(email)) && !isTokenExpired(token);
+        return (extractedEmail.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
     private Boolean isTokenExpired(String token){

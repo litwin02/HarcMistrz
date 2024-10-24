@@ -1,4 +1,4 @@
-import Header from "./Partials/Header";
+import Header from "../Partials/Header";
 
 export default function MainPage(){
     return(

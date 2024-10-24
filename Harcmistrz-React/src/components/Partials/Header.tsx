@@ -11,7 +11,7 @@ export default function Header(){
                     
                     <ul className="flex items-center justify-between text-xl">
                         <li className="mx-4 hover:text-a_yellow">O nas</li>
-                        <li className="hover:text-a_yellow">Zaloguj się</li>
+                        <li className="hover:text-a_yellow"><a href="/login" className="">Zaloguj się</a></li>
                     </ul>
                 </nav>
             </header>
