@@ -37,6 +37,8 @@ public class AuthenticationService {
         }
         var token = jwtService.generateToken(user.getEmail());
         return AuthenticationResponse.builder()
+                .id(user.getId())
+                .role(user.getRole())
                 .token(token)
                 .build();
     }
@@ -49,6 +51,8 @@ public class AuthenticationService {
                 .orElseThrow(() -> new ApiRequestException("Użytkownik o podanym adresie email nie istnieje!"));
         var token = jwtService.generateToken(request.getEmail());
         return AuthenticationResponse.builder()
+                .id(user.getId())
+                .role(user.getRole())
                 .token(token)
                 .build();
     }
@@ -62,6 +66,8 @@ public class AuthenticationService {
             userRepository.save(user);
             var token = jwtService.generateToken(user.getEmail());
             return AuthenticationResponse.builder()
+                    .id(user.getId())
+                    .role(user.getRole())
                     .token(token)
                     .build();
         }

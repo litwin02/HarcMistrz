@@ -53,15 +53,20 @@
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.3</version>
 		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.3</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -97,7 +102,18 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>io.nayuki</groupId>
+			<artifactId>qrcodegen</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+
+
+	</dependencies>
 
 	<build>
 		<plugins>

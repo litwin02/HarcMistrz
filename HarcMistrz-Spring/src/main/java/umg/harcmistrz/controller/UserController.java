@@ -12,7 +12,7 @@ import umg.harcmistrz.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Autowired

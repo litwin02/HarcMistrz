@@ -35,8 +35,8 @@ public class WebSecurityConfig {
         requestHandler.setCsrfRequestAttributeName(null);
         http.authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/users/**").permitAll()
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/users/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

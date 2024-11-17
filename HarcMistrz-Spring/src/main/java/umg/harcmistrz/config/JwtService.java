@@ -3,18 +3,24 @@ package umg.harcmistrz.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-
+@RequiredArgsConstructor
 @Service
 public class JwtService {
-    private final String SECRET_KEY = "My_Very_Very_Secret_Key_2002";
+    private Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String extractEmail(String token) {
         return extractClaims(token, Claims::getSubject);
@@ -54,7 +60,7 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJwt(token).getBody();
+        return Jwts.parser().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
     }
 
 }

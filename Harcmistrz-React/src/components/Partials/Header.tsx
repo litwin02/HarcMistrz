@@ -1,6 +1,7 @@
 
 
 export default function Header(){
+    const token = localStorage.getItem('token');
     return(
         <>
             <header className="bg-s_brown text-white">
@@ -10,8 +11,7 @@ export default function Header(){
                     </a>
                     
                     <ul className="flex items-center justify-between text-xl">
-                        <li className="mx-4 hover:text-a_yellow">O nas</li>
-                        <li className="hover:text-a_yellow"><a href="/login" className="">Zaloguj się</a></li>
+                        {token && <li className="hover:text-a_yellow"><a href="/logout" className="">Wyloguj się</a></li>}
                     </ul>
                 </nav>
             </header>
