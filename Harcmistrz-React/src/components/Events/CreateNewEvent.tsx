@@ -5,16 +5,18 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { BasicTeamResponse } from "../Models/BasicTeamResponse";
 import { MessageResponse } from "../Models/MessageResponse";
 import { useApi } from "../../ApiContext";
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/pl';
 import dayjs, { Dayjs } from 'dayjs';
-
-
-// TODO: Fix timezone problem, clear inputs after success
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 
 const NewEvent = () => {
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    dayjs.tz.setDefault("Europe/Warsaw");
+
     const teamLeaderId = Number(localStorage.getItem('id'));
     const userRole = localStorage.getItem('role');
     const userToken = localStorage.getItem('token');
@@ -74,7 +76,7 @@ const NewEvent = () => {
                 body: JSON.stringify({ 
                     name: name,
                     description: description,
-                    date: date, 
+                    date: strDate, 
                     location: location,
                     teamId: teamId
                 })
@@ -83,6 +85,11 @@ const NewEvent = () => {
                 throw new Error("Nie udało się stworzyć nowego wydarzenia!");
             }
             setMessage(await response.json());
+            setName('');
+            setDescrpition('');
+            setDate(dayjs().tz("Europe/Warsaw"));
+            setStrDate('');
+            setLocation('');
         }
         catch(e: any){
             setError(e.message);
@@ -91,8 +98,20 @@ const NewEvent = () => {
 
     const [name, setName] = useState<string>('');
     const [description, setDescrpition] = useState<string>('');
-    const [date, setDate] = useState<Dayjs | null>(dayjs());
+    const [date, setDate] = useState<Dayjs | null>(dayjs().tz("Europe/Warsaw"));
+    const [strDate, setStrDate] = useState<string>(dayjs().tz("Europe/Warsaw").format());
     const [location, setLocation] = useState<string>('');
+
+    const handleDateChange = (newDate: Dayjs | null) => {
+        if(newDate){
+            setDate(newDate);
+            setStrDate(newDate.tz("Europe/Warsaw").format());
+        }
+        else{
+            setStrDate('');
+        }
+    }
+
 
     return(
         <>
@@ -136,7 +155,7 @@ const NewEvent = () => {
                         <DateTimePicker
                             label="Wybierz datę"
                             value={date}
-                            onChange={(newDate) => setDate(newDate)}
+                            onChange={(handleDateChange)}
                         />
                     </LocalizationProvider>
                 </div>

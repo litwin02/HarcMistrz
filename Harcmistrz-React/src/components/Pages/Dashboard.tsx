@@ -6,9 +6,7 @@ const Dashboard = () => {
     return(
         <>
         <Header />
-            <h1>It works!</h1>
-            <h2>{id}</h2>
-            <h2>{role}</h2>
+            // TODO - Create dashboard content
         </>
     )
 }
