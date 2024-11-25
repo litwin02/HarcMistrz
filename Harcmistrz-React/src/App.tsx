@@ -9,7 +9,11 @@ import Logout from './components/Auth/Logout';
 import CreateNewTeam from './components/Team/CreateNewTeam'
 import AddScoutToTeam from './components/Team/AddScoutToTeam';
 import CreateNevEvent from './components/Events/CreateNewEvent'
+import { QueryClient, QueryClientProvider } from 'react-query';
+import ManageEvent from './components/Events/ManageEvent';
+import NewFieldGame from './components/FieldGames/CreateFieldGame';
 import { ApiProvider } from './ApiContext';
+import QR_Codes from './components/FieldGames/QR_Codes';
 
 function App() {
   const router = createBrowserRouter([
@@ -61,13 +65,48 @@ function App() {
         </ProtectedRoute>
       )
     },
+    {
+      path: '/event/:id',
+      element: (
+        <ProtectedRoute>
+          <ManageEvent />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/new-field-game/:eventId',
+      element: (
+        <ProtectedRoute>
+          <NewFieldGame />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/create-new-qr-code/:fieldGameId',
+      element: (
+        <ProtectedRoute>
+          <QR_Codes />
+        </ProtectedRoute>
+      )
+    }
+
   ]);
+
+  const queryClient = new QueryClient();
+  queryClient.setDefaultOptions({
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  });
 
   return (
     <div className='app font-poppins'>
-      <ApiProvider baseUrl='http://localhost:8080/api/v1'>
-        <RouterProvider router={router} />
-      </ApiProvider>
+      <QueryClientProvider client={queryClient}>
+        <ApiProvider baseUrl='http://localhost:8080/api/v1'>
+          <RouterProvider router={router} />
+        </ApiProvider>
+      </QueryClientProvider>
     </div>
   );
 }

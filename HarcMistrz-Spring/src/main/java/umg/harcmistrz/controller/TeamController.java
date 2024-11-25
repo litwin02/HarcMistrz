@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import umg.harcmistrz.Models.Team;
 import umg.harcmistrz.dto.*;
 
+import umg.harcmistrz.requests.AddScoutToTeamRequest;
+import umg.harcmistrz.requests.CreateTeamRequest;
 import umg.harcmistrz.service.TeamService;
 
 @RestController
@@ -23,8 +25,8 @@ public class TeamController {
 
     // find team by join code in order to verify if it exists, and if it is a correct team
     @PostMapping("/getTeamByJoinCode")
-    public ResponseEntity<TeamResponse> getTeamByJoinCode(@RequestBody FindTeamByCodeRequest findTeamByCodeRequest) {
-        Team team = teamService.getTeamByJoinCode(findTeamByCodeRequest.getJoinCode());
+    public ResponseEntity<TeamDTO> getTeamByJoinCode(@RequestParam String joinCode) {
+        Team team = teamService.getTeamByJoinCode(joinCode);
         return getTeamResponseResponseEntity(team);
     }
 
@@ -39,26 +41,26 @@ public class TeamController {
         return ResponseEntity.ok(new MessageResponse(message));
     }
 
-    @PostMapping("/getTeamByTeamLeaderId")
-    public ResponseEntity<TeamResponse> getTeamByTeamLeaderId(@RequestBody FindTeamByTeamLeaderIdRequest findTeamByTeamLeaderIdRequest) {
-        Team team = teamService.getTeamByTeamLeaderId(findTeamByTeamLeaderIdRequest.getTeamLeaderId());
+    @GetMapping("/getTeamByTeamLeaderId/{teamLeaderId}")
+    public ResponseEntity<TeamDTO> getTeamByTeamLeaderId(@PathVariable Long teamLeaderId) {
+        Team team = teamService.getTeamByTeamLeaderId(teamLeaderId);
         return getTeamResponseResponseEntity(team);
     }
 
     // PRIVATE METHODS
 
-    private ResponseEntity<TeamResponse> getTeamResponseResponseEntity(Team team) {
+    private ResponseEntity<TeamDTO> getTeamResponseResponseEntity(Team team) {
         if(team == null) {
             return ResponseEntity.notFound().build();
         }
-        TeamResponse teamResponse = TeamResponse.builder()
+        TeamDTO teamDTO = TeamDTO.builder()
                 .id(team.getId())
                 .name(team.getName())
                 .joinCode(team.getJoinCode())
                 .teamLeaderId(team.getTeamLeader().getId())
                 .teamLeaderName(team.getTeamLeader().getFirstName() + " " + team.getTeamLeader().getLastName())
                 .build();
-        return ResponseEntity.ok(teamResponse);
+        return ResponseEntity.ok(teamDTO);
     }
 
 

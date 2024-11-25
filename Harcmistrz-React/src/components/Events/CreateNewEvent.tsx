@@ -40,13 +40,12 @@ const NewEvent = () => {
         setError(null);
 
         try{
-            const response = await fetch(`${API_BASE_URL}/teams/getTeamByTeamLeaderId`, {
-                method: 'POST',
+            const response = await fetch(`${API_BASE_URL}/teams/getTeamByTeamLeaderId/${teamLeaderId}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${userToken}` 
                 },
-                body: JSON.stringify({ teamLeaderId })
             });
             if(!response.ok){
                 navigate("/dashboard");
@@ -54,7 +53,7 @@ const NewEvent = () => {
             setTeam(await response.json());
         }
         catch(e: any){
-            setError(e.message);
+            throw e;
         }
 
     }

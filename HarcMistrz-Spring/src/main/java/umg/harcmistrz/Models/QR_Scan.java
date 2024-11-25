@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Builder
 @Data
@@ -18,14 +18,14 @@ public class QR_Scan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "scout_id")
     private ScoutInTeam scout;
 
     @OneToOne
     @JoinColumn(name = "qr_code_id")
     private QR_Code qrCode;
-    private Date date;
+    private OffsetDateTime scanTime;
     private int points;
 
 }

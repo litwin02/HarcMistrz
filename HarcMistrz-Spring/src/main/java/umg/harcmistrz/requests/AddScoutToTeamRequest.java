@@ -1,4 +1,4 @@
-package umg.harcmistrz.dto;
+package umg.harcmistrz.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class FindTeamByCodeRequest {
-    private String joinCode;
+@AllArgsConstructor
+public class AddScoutToTeamRequest {
+    private long teamId;
+    private long scoutId;
 }

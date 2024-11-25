@@ -1,4 +1,4 @@
-package umg.harcmistrz.dto;
+package umg.harcmistrz.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FieldGameDTO {
-    private Long id;
+public class NewFieldGameRequest {
     private String name;
     private String description;
-    private Boolean isActivated;
     private Long eventId;
 }

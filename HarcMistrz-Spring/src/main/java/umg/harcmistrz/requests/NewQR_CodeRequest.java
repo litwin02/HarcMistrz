@@ -1,4 +1,4 @@
-package umg.harcmistrz.dto;
+package umg.harcmistrz.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindTeamByTeamLeaderIdRequest {
-    private Long teamLeaderId;
+public class NewQR_CodeRequest {
+    private Long fieldGameId;
+    private int points;
+    private String description;
 }

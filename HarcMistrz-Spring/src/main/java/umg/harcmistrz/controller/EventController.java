@@ -3,13 +3,15 @@ package umg.harcmistrz.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import umg.harcmistrz.Models.Event;
 import umg.harcmistrz.dto.MessageResponse;
-import umg.harcmistrz.dto.NewEventRequest;
+import umg.harcmistrz.dto.EventDTO;
+import umg.harcmistrz.requests.NewEventRequest;
 import umg.harcmistrz.service.EventService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +25,35 @@ public class EventController {
     public ResponseEntity<MessageResponse> createNewEvent(@RequestBody NewEventRequest newEventRequest) {
         eventService.createNewEvent(newEventRequest);
         return ResponseEntity.ok(new MessageResponse("Utworzono nowe wydarzenie!"));
+    }
+
+    @GetMapping("/getAllEventsByTeamId/{teamId}")
+    public ResponseEntity<List<EventDTO>> getEventByTeamId(@PathVariable Long teamId) {
+        List<Event> events = eventService.getEventsByTeamId(teamId);
+        List<EventDTO> eventDTO = new ArrayList<>();
+        for (Event event : events) {
+            eventDTO.add(EventDTO.builder()
+                    .id(event.getId())
+                    .name(event.getName())
+                    .description(event.getDescription())
+                    .date(event.getDate())
+                    .location(event.getLocation())
+                    .teamId(event.getTeam().getId())
+                    .build());
+        }
+        return ResponseEntity.ok(eventDTO);
+    }
+
+    @GetMapping("/getEventById/{id}")
+    public ResponseEntity<EventDTO> getEventById(@PathVariable Long id) {
+        Event event = eventService.getEventById(id);
+        return ResponseEntity.ok(EventDTO.builder()
+                .id(event.getId())
+                .name(event.getName())
+                .description(event.getDescription())
+                .date(event.getDate())
+                .location(event.getLocation())
+                .teamId(event.getTeam().getId())
+                .build());
     }
 }

@@ -19,9 +19,9 @@ public class QR_Code {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "game_id")
+    @JoinColumn(name = "field_game_id")
     private FieldGame fieldGame;
-    private UUID qr_code_id;
+    private UUID qrCode;
     private int points;
     private boolean scanned;
     private String description;

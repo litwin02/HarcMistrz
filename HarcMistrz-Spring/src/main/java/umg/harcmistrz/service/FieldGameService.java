@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.FieldGame;
 import umg.harcmistrz.dto.FieldGameDTO;
 import umg.harcmistrz.repository.FieldGameRepository;
+import umg.harcmistrz.requests.NewFieldGameRequest;
 
 @RequiredArgsConstructor
 @Service
@@ -17,17 +18,21 @@ public class FieldGameService {
     @Autowired
     private final FieldGameRepository fieldGameRepository;
 
-    public void createNewFieldGame(FieldGameDTO newFieldGameRequest) {
+    public void createNewFieldGame(NewFieldGameRequest newFieldGameRequest) {
         FieldGame fieldGame = new FieldGame();
         fieldGame.setName(newFieldGameRequest.getName());
         fieldGame.setDescription(newFieldGameRequest.getDescription());
-        fieldGame.setLocation(newFieldGameRequest.getLocation());
+        fieldGame.setIsActivated(false);
         fieldGame.setEvent(eventService.getEventById(newFieldGameRequest.getEventId()));
         fieldGameRepository.save(fieldGame);
     }
 
     public FieldGame getFieldGameById(Long id) {
         return fieldGameRepository.findById(id).orElse(null);
+    }
+
+    public FieldGame getFieldGameByEventId(Long eventId) {
+        return fieldGameRepository.findByEventId(eventId);
     }
 
     public void deleteFieldGame(Long id) {
@@ -39,7 +44,6 @@ public class FieldGameService {
         if (fieldGame != null) {
             fieldGame.setName(newFieldGameRequest.getName());
             fieldGame.setDescription(newFieldGameRequest.getDescription());
-            fieldGame.setLocation(newFieldGameRequest.getLocation());
             fieldGameRepository.save(fieldGame);
         }
     }

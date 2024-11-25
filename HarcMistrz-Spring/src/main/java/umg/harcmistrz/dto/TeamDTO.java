@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateTeamRequest {
+public class TeamDTO {
+    private long id;
+    private String name;
+    private String joinCode;
     private long teamLeaderId;
-    private String teamName;
+    private String teamLeaderName;
 }
