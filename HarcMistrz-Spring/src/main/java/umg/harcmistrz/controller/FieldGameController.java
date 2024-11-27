@@ -24,6 +24,21 @@ public class FieldGameController {
         return ResponseEntity.ok(new MessageResponse("Utworzono nowe pole gry!"));
     }
 
+    @GetMapping("/getFieldGameById/{id}")
+    public ResponseEntity<FieldGameDTO> getFieldGameById(@PathVariable Long id) {
+        FieldGame fieldGame = fieldGameService.getFieldGameById(id);
+        if(fieldGame == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(FieldGameDTO.builder()
+                .id(fieldGame.getId())
+                .name(fieldGame.getName())
+                .description(fieldGame.getDescription())
+                .isActivated(fieldGame.getIsActivated())
+                .eventId(fieldGame.getEvent().getId())
+                .build());
+    }
+
     @GetMapping("/getFieldGameByEventId/{id}")
     public ResponseEntity<FieldGameDTO> getFieldGameByEventId(@PathVariable Long id) {
         FieldGame fieldGame = fieldGameService.getFieldGameByEventId(id);

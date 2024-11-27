@@ -82,7 +82,7 @@ function App() {
       )
     },
     {
-      path: '/create-new-qr-code/:fieldGameId',
+      path: '/qr-codes/:fieldGameId',
       element: (
         <ProtectedRoute>
           <QR_Codes />

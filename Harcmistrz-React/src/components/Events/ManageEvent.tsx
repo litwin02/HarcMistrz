@@ -5,9 +5,17 @@ import { Event } from '../Models/EventModel';
 import dayjs from "dayjs";
 import Header from '../Partials/Header';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const ManageEvent = () => {
     const navigate = useNavigate();
+    useEffect(() => {
+        if(localStorage.getItem('role') !== 'TEAM_LEADER'){
+            navigate('/dashboard');
+        }
+    });
+
+    
 
     const API_BASE_URL = useApi();
     const getEvent = async (id: string): Promise<Event> => {
@@ -90,7 +98,7 @@ const ManageEvent = () => {
                             <p>Nazwa: {fieldGames.name}</p>
                             <p>Opis: {fieldGames.description}</p>
                             <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Zarządzaj grą terenową</button>
-                            <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Zarządzaj kodami QR</button>
+                            <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/qr-codes/${fieldGames.id}`)}>Zarządzaj kodami QR</button>
                             <button className="w-1/2 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Aktywuj grę</button>
                         </div>}
                         {!fieldGames && <button className="w-1/4 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" 

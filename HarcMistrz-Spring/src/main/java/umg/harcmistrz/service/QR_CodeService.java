@@ -8,13 +8,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.QR_Code;
+import umg.harcmistrz.dto.QR_CodeDTO;
 import umg.harcmistrz.repository.FieldGameRepository;
 import umg.harcmistrz.repository.QR_CodeRepository;
 import umg.harcmistrz.requests.NewQR_CodeRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +31,55 @@ public class QR_CodeService {
 
     @Autowired
     private final FieldGameRepository fieldGameRepository;
+
+    public List<QR_CodeDTO> getQRCodesByFieldGameId(Long id) {
+        List<QR_Code> qr_codes = qr_codeRepository.findByFieldGameId(id);
+        return qr_codes.stream()
+                .map(qrCode -> QR_CodeDTO.builder()
+                        .id(qrCode.getId())
+                        .fieldGameId(qrCode.getFieldGame().getId())
+                        .qrCode(qrCode.getQrCode())
+                        .points(qrCode.getPoints())
+                        .scanned(qrCode.isScanned())
+                        .description(qrCode.getDescription())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public void deleteQRCode(UUID qrCode) {
+        Optional<QR_Code> qr_code = qr_codeRepository.findByQrCode(qrCode);
+        if (qr_code.isEmpty()) {
+            throw new IllegalArgumentException("QR Code not found");
+        }
+        qr_codeRepository.delete(qr_code.get());
+    }
+
+    public void modifyQRCode(QR_CodeDTO qrCodeDTO) {
+        Optional<QR_Code> qr_code = qr_codeRepository.findByQrCode(qrCodeDTO.getQrCode());
+        if (qr_code.isEmpty()) {
+            throw new IllegalArgumentException("QR Code not found");
+        }
+        qr_code.get().setPoints(qrCodeDTO.getPoints());
+        qr_code.get().setDescription(qrCodeDTO.getDescription());
+        qr_codeRepository.save(qr_code.get());
+    }
+
+    public byte[] getQRCodeImageByQRCodeId(UUID qrCode){
+        try{
+            Optional<QR_Code> qr_code = qr_codeRepository.findByQrCode(qrCode);
+            if (qr_code.isEmpty()) {
+                throw new IllegalArgumentException("QR Code not found");
+            }
+            String data = String.format("{\"qr_code_id\":\"%s\", \"field_game_id\":\"%d\", \"points\":%d}",
+                    qr_code.get().getQrCode(),
+                    qr_code.get().getFieldGame().getId(),
+                    qr_code.get().getPoints());
+            return generateQRCodeImage(data, 300, 300);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not generate QR Code", e);
+        }
+
+    }
 
     public byte[] saveQRCode(NewQR_CodeRequest newQR_CodeRequest) throws IOException {
         QR_Code qr_code = new QR_Code();
@@ -46,6 +101,8 @@ public class QR_CodeService {
 
         return generateQRCodeImage(data, 300, 300);
     }
+
+    // PRIVATE METHODS
 
     private byte[] generateQRCodeImage(String data, int width, int height) {
         try {
