@@ -31,6 +31,7 @@ const RegisterForm = () => {
             });
     
             if (!response.ok) {
+                setError("Rejestracja nie powiodła się. Błędny email lub hasło.");
                 throw new Error("Rejestracja nie powiodła się. Błędny email lub hasło.");
             }
             const data: RegisterResponse = await response.json();
@@ -42,11 +43,12 @@ const RegisterForm = () => {
                 navigate('/dashboard');
             } 
             else {
+                setError("Rejestracja nie powiodła się. Błędny email lub hasło.");
                 throw new Error("Rejestracja nie powiodła się. Błędny email lub hasło.");
             }
         } 
         catch (e: any) {
-            setError(e.message);
+            console.error(e);
         }
     };
 

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "../Partials/Header";
 import { MessageResponse } from "../Models/MessageResponse";
 import { BasicTeamResponse } from "../Models/BasicTeamResponse"
@@ -7,14 +7,8 @@ import { BasicTeamResponse } from "../Models/BasicTeamResponse"
 const AddScoutToTeam = () => {
 
     const scoutId = Number(localStorage.getItem('id'));
-    const userRole = localStorage.getItem('role');
     const userToken = localStorage.getItem('token');
     const navigate = useNavigate();
-    useEffect(() => {
-        if(userRole !== 'SCOUT'){
-            navigate('/dashboard');
-        }
-    }, []);
 
     const [error, setError] = useState<string | null>(null);
     const [joinCode, setJoinCode] = useState<string>('');

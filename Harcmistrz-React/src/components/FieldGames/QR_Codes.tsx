@@ -11,12 +11,10 @@ import { QR_CodeDTO } from "../Models/QR_CodeDTO";
 const QR_Codes = () => {
     const navigate = useNavigate();
     const API_BASE_URL = useApi();
+    const { eventId } = useParams<{ eventId: string }>();
     const { fieldGameId } = useParams<{ fieldGameId: string }>();
 
     useEffect(() => {
-        if(localStorage.getItem('role') !== 'TEAM_LEADER'){
-            navigate('/dashboard');
-        }
         getFieldGameById(fieldGameId? fieldGameId : "");
     }, []);
 
@@ -39,29 +37,7 @@ const QR_Codes = () => {
             console.error(error);
         }
     };
-    
-
-    // const generateQRCode = async () => {
-    //     const response = await fetch(`${API_BASE_URL}/qr_codes/createNewQRCode`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //         },
-    //         body: JSON.stringify({
-    //             fieldGameId: fieldGameId,
-    //             points: 50,
-    //             description: "test"
-    //         })
-    //     });
-    //     if (!response.ok) {
-    //         throw new Error("Nie udało się wygenerować kodu QR");
-    //     }
-    //     const blob = await response.blob();
-    //     setQrCodeUrl(URL.createObjectURL(blob));
-    // };
-
-    
+        
     const getQRCodesInfoByFieldGameId = async (id: string): Promise<any> => {
         try{
             const response = await fetch(`${API_BASE_URL}/qr_codes/getQRCodesInfoByFieldGameId/${id}`, {
@@ -168,18 +144,19 @@ const QR_Codes = () => {
                                         <button className="bg-red-500 text-white py-1 px-2 rounded-lg mt-2" onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</button>
                                     </div>
                                 ))}
+                                
                             </div>
+                            {(!qrCodes || qrCodes.length === 0) && <p>Brak kodów QR dla tej gry terenowej.</p>}
                         </div>
                     </div>
-                    <button className="w-1/4 mt-5 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/new-qr-code/${fieldGameId}`)}>Dodaj kod QR</button>
-                    <button className="w-1/4 mt-5 bg-s_brown py-1 rounded text-white" onClick={() => navigate(`/event/$`)}>Wróć do panelu wydarzenia</button>
+                    <button className="w-1/4 mt-5 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/new-qr-code/${eventId}/${fieldGameId}`)}>Dodaj kod QR</button>
+                    <button className="w-1/4 mt-5 bg-s_brown py-1 rounded text-white" onClick={() => navigate(`/event/${eventId}`)}>Wróć do panelu wydarzenia</button>
                 </div>
             </main>
         </>
     );
 };
 
-// TODO: Dodać przycisk wracania do panelu wydarzenia, zrobić stronę dodawania kodu QR, zrobić stronę edycji kodu QR, refactoring
-// ManageEvent.tsx - nie sprawdzać czy jest tablica, tylko czy jest obiekt; Zabezpieczyć wszystkie strony rolami użytkowników
-// być może będzie trzeba stworzyć middleware na wzór protected route; Zabezpieczyć endpointy w backendzie;
+// TODO:  zrobić stronę dodawania kodu QR, zrobić stronę edycji kodu QR, refactoring
+// Zabezpieczyć endpointy w backendzie;
 export default QR_Codes;

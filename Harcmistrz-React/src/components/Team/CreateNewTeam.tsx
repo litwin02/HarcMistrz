@@ -1,20 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "../Partials/Header";
 import { useApi } from "../../ApiContext";
 
 const NewTeam = () => {
     const teamLeaderId = Number(localStorage.getItem('id'));
-    const userRole = localStorage.getItem('role');
     const userToken = localStorage.getItem('token');
     const API_BASE_URL = useApi();
     const navigate = useNavigate();
-    useEffect(() => {
-        if(userRole !== 'TEAM_LEADER'){
-            navigate('/dashboard');
-        }
-    }, []);
-    
 
     const [error, setError] = useState<string | null>(null);
     const [teamName, setTeamName] = useState<string>('');

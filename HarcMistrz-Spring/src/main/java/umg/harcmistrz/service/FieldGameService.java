@@ -8,6 +8,8 @@ import umg.harcmistrz.dto.FieldGameDTO;
 import umg.harcmistrz.repository.FieldGameRepository;
 import umg.harcmistrz.requests.NewFieldGameRequest;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class FieldGameService {
@@ -33,6 +35,10 @@ public class FieldGameService {
 
     public FieldGame getFieldGameByEventId(Long eventId) {
         return fieldGameRepository.findByEventId(eventId);
+    }
+
+    public List<FieldGame> getAllFieldGamesByEventId(Long eventId) {
+        return fieldGameRepository.findAllByEventId(eventId);
     }
 
     public void deleteFieldGame(Long id) {

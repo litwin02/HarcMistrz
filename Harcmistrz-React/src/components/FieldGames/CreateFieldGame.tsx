@@ -1,20 +1,15 @@
 import { useParams } from "react-router-dom";
 import Header from "../Partials/Header";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../ApiContext";
 import { MessageResponse } from "../Models/MessageResponse";
 
 const NewFieldGame = () => {
-    const userRole = localStorage.getItem('role');
     const userToken = localStorage.getItem('token');
     const API_BASE_URL = useApi();
     const navigate = useNavigate();
-    useEffect(() => {
-        if(userRole !== 'TEAM_LEADER'){
-            navigate('/dashboard');
-        }
-    }, []);
+
 
     const [name, setName] = useState<string>('');
     const [description, setDescrpition] = useState<string>('');

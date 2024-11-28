@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Partials/Header';
 import { Roles } from '../Models/Roles';
+import { set } from 'date-fns';
 
 interface LoginResponse {
   id?: number;
@@ -30,6 +31,7 @@ const LoginForm = () => {
       });
     
       if (!response.ok) {
+        setError("Logowanie nie powiodło się. Błędny email lub hasło.");
         throw new Error("Logowanie nie powiodło się. Błędny email lub hasło.");
       }
       const data: LoginResponse = await response.json();
@@ -41,11 +43,12 @@ const LoginForm = () => {
         navigate('/dashboard');
       } 
       else {
+        setError("Logowanie nie powiodło się. Błędny email lub hasło.");
         throw new Error("Logowanie nie powiodło się. Błędny email lub hasło.");
       }
     } 
     catch (e: any) {
-      setError(e.message);
+      console.error(e);
     }
   };
 

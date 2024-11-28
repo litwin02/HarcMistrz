@@ -36,7 +36,7 @@ function App() {
     {
       path: '/dashboard',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["TEAM_LEADER", "SCOUT"]}>
           <Dashboard />
         </ProtectedRoute>
       ),
@@ -44,7 +44,7 @@ function App() {
     {
       path: '/create-new-team',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <CreateNewTeam />
         </ProtectedRoute>
       )
@@ -52,7 +52,7 @@ function App() {
     {
       path: '/join-team',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["SCOUT"]}>
           <AddScoutToTeam />
         </ProtectedRoute>
       )
@@ -60,7 +60,7 @@ function App() {
     {
       path: 'create-new-event',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <CreateNevEvent />
         </ProtectedRoute>
       )
@@ -68,7 +68,7 @@ function App() {
     {
       path: '/event/:id',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <ManageEvent />
         </ProtectedRoute>
       )
@@ -76,19 +76,27 @@ function App() {
     {
       path: '/new-field-game/:eventId',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <NewFieldGame />
         </ProtectedRoute>
       )
     },
     {
-      path: '/qr-codes/:fieldGameId',
+      path: '/qr-codes/:eventId/:fieldGameId',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <QR_Codes />
         </ProtectedRoute>
       )
-    }
+    },
+    {
+      path: '/new-qr-code/:eventId/:fieldGameId',
+      element: (
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
+          <QR_Codes />
+        </ProtectedRoute>
+      )
+    },
 
   ]);
 

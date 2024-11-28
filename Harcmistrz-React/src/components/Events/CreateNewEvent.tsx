@@ -18,14 +18,10 @@ const NewEvent = () => {
     dayjs.tz.setDefault("Europe/Warsaw");
 
     const teamLeaderId = Number(localStorage.getItem('id'));
-    const userRole = localStorage.getItem('role');
     const userToken = localStorage.getItem('token');
     const API_BASE_URL = useApi();
     const navigate = useNavigate();
     useEffect(() => {
-        if(userRole !== 'TEAM_LEADER'){
-            navigate('/dashboard');
-        }
         getTeam();
     }, []);
 

@@ -5,17 +5,9 @@ import { Event } from '../Models/EventModel';
 import dayjs from "dayjs";
 import Header from '../Partials/Header';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 
 const ManageEvent = () => {
     const navigate = useNavigate();
-    useEffect(() => {
-        if(localStorage.getItem('role') !== 'TEAM_LEADER'){
-            navigate('/dashboard');
-        }
-    });
-
-    
 
     const API_BASE_URL = useApi();
     const getEvent = async (id: string): Promise<Event> => {
@@ -35,7 +27,7 @@ const ManageEvent = () => {
     };
 
     const getFieldGames = async (id: string): Promise<any> => {
-        const response = await fetch(`${API_BASE_URL}/fieldGames/getFieldGameByEventId/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/fieldGames/getAllFieldGamesByEventId/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,24 +75,17 @@ const ManageEvent = () => {
                         <h2 className="text-xl">Gry terenowe:</h2>
                         {fieldGamesIsLoading && <p>Ładowanie...</p>}
                         {fieldGamesError && <p>{fieldGamesError.message}</p>}
-                        {Array.isArray(fieldGames) && fieldGames.map((fieldGame: any) => {
+                        {fieldGames && fieldGames.map((fieldGame: any) => {
                             return <div key={fieldGame.id} className="w-1/2 flex flex-col justify-between mb-5">
                                 <p>Nazwa: {fieldGame.name}</p>
                                 <p>Opis: {fieldGame.description}</p>
                                 <p>Lokalizacja: {fieldGame.location}</p>
                                 <p>Data: {fieldGame.date}</p>
                                 <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Zarządzaj grą terenową</button>
-                                <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Zarządzaj kodami QR</button>
+                                <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/qr-codes/${eventData?.id}/${fieldGame.id}`)}>Zarządzaj kodami QR</button>
                                 <button className="w-1/2 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Aktywuj grę</button>
                             </div>
-                        })}
-                        {!Array.isArray(fieldGames) && fieldGames && <div className="w-1/2 flex flex-col justify-between mb-5">
-                            <p>Nazwa: {fieldGames.name}</p>
-                            <p>Opis: {fieldGames.description}</p>
-                            <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Zarządzaj grą terenową</button>
-                            <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/qr-codes/${fieldGames.id}`)}>Zarządzaj kodami QR</button>
-                            <button className="w-1/2 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Aktywuj grę</button>
-                        </div>}
+                        }) }
                         {!fieldGames && <button className="w-1/4 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" 
                         onClick={() => navigate(`/new-field-game/${eventData?.id}`)}>Dodaj grę terenową</button>}
                     </div>

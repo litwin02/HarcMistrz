@@ -10,6 +10,9 @@ import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.requests.NewFieldGameRequest;
 import umg.harcmistrz.service.FieldGameService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/fieldGames")
 @RequiredArgsConstructor
@@ -52,5 +55,19 @@ public class FieldGameController {
                 .isActivated(fieldGame.getIsActivated())
                 .eventId(fieldGame.getEvent().getId())
                 .build());
+    }
+
+    @GetMapping("/getAllFieldGamesByEventId/{eventId}")
+    public ResponseEntity<List<FieldGameDTO>> getAllFieldGamesByEventId(@PathVariable Long eventId) {
+        List<FieldGame> fieldGames = fieldGameService.getAllFieldGamesByEventId(eventId);
+        return ResponseEntity.ok(fieldGames.stream()
+                .map(fieldGame -> FieldGameDTO.builder()
+                        .id(fieldGame.getId())
+                        .name(fieldGame.getName())
+                        .description(fieldGame.getDescription())
+                        .isActivated(fieldGame.getIsActivated())
+                        .eventId(fieldGame.getEvent().getId())
+                        .build())
+                .collect(Collectors.toList()));
     }
 }
