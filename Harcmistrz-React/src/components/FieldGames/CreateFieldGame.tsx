@@ -16,7 +16,7 @@ const NewFieldGame = () => {
     const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState<MessageResponse>();
     const { eventId: eventId } = useParams<{ eventId: string }>();
-    console.log(eventId);
+
     const addNewFieldGame = async (event: React.FormEvent) => {
         event.preventDefault();
         try{

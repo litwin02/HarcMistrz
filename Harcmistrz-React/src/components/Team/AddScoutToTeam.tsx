@@ -20,13 +20,13 @@ const AddScoutToTeam = () => {
         setTeamResponse(undefined);
         
         try{
-            const response = await fetch('http://localhost:8080/api/v1/teams/getTeamByJoinCode', {
+            const response = await fetch(`http://localhost:8080/api/v1/teams/getTeamByJoinCode?joinCode=${joinCode}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${userToken}`
                 },
-                body: JSON.stringify({joinCode})
+                body: joinCode
             });
             if(!response.ok){
                 throw new Error("Nie znaleziono takiej drużyny!");
@@ -64,7 +64,7 @@ const AddScoutToTeam = () => {
     }
 
     const returnToDashboard = () => {
-        navigate("/dashboard");
+        navigate("/user-dashboard");
     };
 
     return (
@@ -84,7 +84,7 @@ const AddScoutToTeam = () => {
                     />
                 </div>
                 {error && <p className='mb-8 text-red-800 text-2xl'>{error}</p>}
-                <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Szukaj zepsołu</button>
+                <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Szukaj zespołu</button>
             </form>
             {teamResponse && <h3 className='text-2xl mb-5'>Nazwa zepsołu: {teamResponse.name}</h3>}
             {teamResponse && <h3 className='text-2xl mb-5'>Lider zespołu: {teamResponse.teamLeaderName}</h3>}

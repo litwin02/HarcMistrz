@@ -102,6 +102,7 @@ const Dashboard = () => {
                         <div className="w-1/2 bg-white p-5 rounded-lg mb-10">
                             <h2 className="text-xl">Twoje drużyna:</h2>
                             <p>Zespół: {team.name}</p>
+                            <p>Kod zespołu: {team.joinCode}</p>
                             <button className="bg-a_yellow p-1 mt-1 rounded hover:text-s_brown" onClick={(navigateToTeamManagement)}>Zarządzaj swoją drużyną</button>
                         </div>
                         }

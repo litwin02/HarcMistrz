@@ -40,7 +40,15 @@ const RegisterForm = () => {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('id', data.id.toString());
                 localStorage.setItem('role', data.role.toString());
-                navigate('/dashboard');
+                if(data.role === Roles.ADMIN) {
+                    navigate('/admin');
+                }
+                else if(data.role === Roles.TEAM_LEADER) {
+                    navigate('/dashboard');
+                }
+                else {
+                    navigate('/user-dashboard');
+                } 
             } 
             else {
                 setError("Rejestracja nie powiodła się. Błędny email lub hasło.");

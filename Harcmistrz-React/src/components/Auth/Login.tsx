@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Partials/Header';
 import { Roles } from '../Models/Roles';
-import { set } from 'date-fns';
 
 interface LoginResponse {
   id?: number;
@@ -40,7 +39,15 @@ const LoginForm = () => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('id', data.id.toString());
         localStorage.setItem('role', data.role.toString());
-        navigate('/dashboard');
+        if(data.role === Roles.ADMIN) {
+          navigate('/admin');
+        }
+        else if(data.role === Roles.TEAM_LEADER) {
+          navigate('/dashboard');
+        }
+        else {
+          navigate('/user-dashboard');
+        } 
       } 
       else {
         setError("Logowanie nie powiodło się. Błędny email lub hasło.");

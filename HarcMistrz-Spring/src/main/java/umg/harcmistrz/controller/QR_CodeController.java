@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.dto.QR_CodeDTO;
 import umg.harcmistrz.requests.NewQR_CodeRequest;
+import umg.harcmistrz.requests.UpdateQR_CodeRequest;
 import umg.harcmistrz.service.QR_CodeService;
 
 import java.util.List;
@@ -19,6 +20,16 @@ public class QR_CodeController {
 
     @Autowired
     private QR_CodeService qr_codeService;
+
+    @GetMapping("/getQRCodeInfoById/{id}")
+    public ResponseEntity<QR_CodeDTO> getQRCodeInfoById(@PathVariable Long id) {
+        try {
+            QR_CodeDTO qrCode = qr_codeService.getQRCodeById(id);
+            return ResponseEntity.ok(qrCode);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @GetMapping("/getQRCodesInfoByFieldGameId/{id}")
     public ResponseEntity<List<QR_CodeDTO>> getQRCodesInfoByFieldGameId(@PathVariable Long id) {
@@ -40,7 +51,6 @@ public class QR_CodeController {
         }
     }
 
-    // przetestować ten endpoint
     @DeleteMapping("/deleteQRCode/{qrCode}")
     public ResponseEntity<MessageResponse> deleteQRCode(@PathVariable UUID qrCode) {
         try {
@@ -53,9 +63,9 @@ public class QR_CodeController {
 
     // przetestować ten endpoint
     @PutMapping("/modifyQRCode")
-    public ResponseEntity<MessageResponse> modifyQRCode(@RequestBody QR_CodeDTO qrCodeDTO) {
+    public ResponseEntity<MessageResponse> modifyQRCode(@RequestBody UpdateQR_CodeRequest qrCodeRequest) {
         try {
-            qr_codeService.modifyQRCode(qrCodeDTO);
+            qr_codeService.modifyQRCode(qrCodeRequest);
             return ResponseEntity.ok(new MessageResponse("Zmodyfikowano kod QR!"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

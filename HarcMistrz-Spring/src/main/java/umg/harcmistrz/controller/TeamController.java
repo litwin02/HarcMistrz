@@ -37,7 +37,7 @@ public class TeamController {
             return ResponseEntity.notFound().build();
         }
         boolean wasAttemptSuccessful = teamService.addScoutToTeam(addScoutToTeamRequest.getScoutId(), team);
-        String message = wasAttemptSuccessful ? "Dodano harcerza do drużyny!" : "Harcerz jest już w tej drużynie lub należy do innej drużyny!";
+        String message = wasAttemptSuccessful ? "Dołączyłeś do drużyny!" : "Jesteś już w tej drużynie lub należysz do innej drużyny!";
         return ResponseEntity.ok(new MessageResponse(message));
     }
 
@@ -47,8 +47,14 @@ public class TeamController {
         return getTeamResponseResponseEntity(team);
     }
 
-    // PRIVATE METHODS
+    @GetMapping("/getTeamByScoutId/{scoutId}")
+    public ResponseEntity<TeamDTO> getTeamByScoutId(@PathVariable Long scoutId) {
+        Team team = teamService.getTeamByScoutId(scoutId);
+        return getTeamResponseResponseEntity(team);
+    }
 
+
+    // PRIVATE METHODS
     private ResponseEntity<TeamDTO> getTeamResponseResponseEntity(Team team) {
         if(team == null) {
             return ResponseEntity.notFound().build();

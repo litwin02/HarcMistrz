@@ -8,4 +8,5 @@ import java.util.List;
 public interface FieldGameRepository extends JpaRepository<FieldGame, Long> {
     FieldGame findByEventId(Long eventId);
     List<FieldGame> findAllByEventId(Long eventId);
+    void deleteByEventId(Long eventId);
 }

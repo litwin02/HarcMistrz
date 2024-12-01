@@ -12,6 +12,7 @@ import umg.harcmistrz.dto.QR_CodeDTO;
 import umg.harcmistrz.repository.FieldGameRepository;
 import umg.harcmistrz.repository.QR_CodeRepository;
 import umg.harcmistrz.requests.NewQR_CodeRequest;
+import umg.harcmistrz.requests.UpdateQR_CodeRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,6 +47,21 @@ public class QR_CodeService {
                 .collect(Collectors.toList());
     }
 
+    public QR_CodeDTO getQRCodeById(Long id) {
+        Optional<QR_Code> qr_code = qr_codeRepository.findById(id);
+        if (qr_code.isEmpty()) {
+            throw new IllegalArgumentException("QR Code not found");
+        }
+        return QR_CodeDTO.builder()
+                .id(qr_code.get().getId())
+                .fieldGameId(qr_code.get().getFieldGame().getId())
+                .qrCode(qr_code.get().getQrCode())
+                .points(qr_code.get().getPoints())
+                .scanned(qr_code.get().isScanned())
+                .description(qr_code.get().getDescription())
+                .build();
+    }
+
     public void deleteQRCode(UUID qrCode) {
         Optional<QR_Code> qr_code = qr_codeRepository.findByQrCode(qrCode);
         if (qr_code.isEmpty()) {
@@ -54,13 +70,13 @@ public class QR_CodeService {
         qr_codeRepository.delete(qr_code.get());
     }
 
-    public void modifyQRCode(QR_CodeDTO qrCodeDTO) {
-        Optional<QR_Code> qr_code = qr_codeRepository.findByQrCode(qrCodeDTO.getQrCode());
+    public void modifyQRCode(UpdateQR_CodeRequest qrCodeRequest) {
+        Optional<QR_Code> qr_code = qr_codeRepository.findById(qrCodeRequest.getId());
         if (qr_code.isEmpty()) {
             throw new IllegalArgumentException("QR Code not found");
         }
-        qr_code.get().setPoints(qrCodeDTO.getPoints());
-        qr_code.get().setDescription(qrCodeDTO.getDescription());
+        qr_code.get().setPoints(qrCodeRequest.getPoints());
+        qr_code.get().setDescription(qrCodeRequest.getDescription());
         qr_codeRepository.save(qr_code.get());
     }
 

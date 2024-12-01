@@ -5,10 +5,17 @@ import { useNavigate } from "react-router-dom";
 export default function MainPage(){
 
     const userToken = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
     const navigate = useNavigate();
     useEffect(() => {
-        if(userToken != null){
+        if(userToken != null && role === 'TEAM_LEADER') {
             navigate('/dashboard');
+        }
+        else if(userToken != null && role === 'USER') {
+            navigate('/user-dashboard');
+        }
+        else if(userToken != null && role === 'ADMIN') {
+            navigate('/admin');
         }
     }, []);
 

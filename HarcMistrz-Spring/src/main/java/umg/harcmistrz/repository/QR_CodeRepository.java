@@ -11,5 +11,6 @@ import java.util.UUID;
 @Repository
 public interface QR_CodeRepository extends JpaRepository<QR_Code, Long> {
     Optional<QR_Code> findByQrCode(UUID qrCode);
-   List<QR_Code> findByFieldGameId(Long fieldGameId);
+    List<QR_Code> findByFieldGameId(Long fieldGameId);
+    void deleteAllByFieldGameId(Long fieldGameId);
 }

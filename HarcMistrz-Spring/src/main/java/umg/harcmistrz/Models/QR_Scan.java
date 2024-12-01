@@ -1,5 +1,6 @@
 package umg.harcmistrz.Models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class QR_Scan {
     private ScoutInTeam scout;
 
     @OneToOne
+    @Nullable
     @JoinColumn(name = "qr_code_id")
     private QR_Code qrCode;
     private OffsetDateTime scanTime;

@@ -22,10 +22,10 @@ public class TeamService {
     private TeamRepository teamRepository;
 
     @Autowired
-    private UserService userService;
+    private ScoutInTeamRepository scoutInTeamRepository;
 
     @Autowired
-    private ScoutInTeamRepository scoutInTeamRepository;
+    private UserService userService;
 
     public Team getTeamById(Long id) {
         return teamRepository.findById(id).orElse(null);
@@ -68,6 +68,14 @@ public class TeamService {
 
     public Team getTeamByTeamLeaderId(long teamLeaderId) {
         return teamRepository.findByTeamLeaderId(teamLeaderId);
+    }
+
+    public Team getTeamByScoutId(long scoutId) {
+        List<ScoutInTeam> scoutInTeam = scoutInTeamRepository.findByScoutId(scoutId);
+        if (scoutInTeam.isEmpty()) {
+            return null;
+        }
+        return scoutInTeam.getFirst().getTeam();
     }
 
 

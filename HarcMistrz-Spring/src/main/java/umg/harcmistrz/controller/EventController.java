@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import umg.harcmistrz.Models.Event;
 import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.dto.EventDTO;
+import umg.harcmistrz.requests.EditEventRequest;
 import umg.harcmistrz.requests.NewEventRequest;
 import umg.harcmistrz.service.EventService;
 
@@ -55,5 +56,17 @@ public class EventController {
                 .location(event.getLocation())
                 .teamId(event.getTeam().getId())
                 .build());
+    }
+
+    @PutMapping("/updateEvent")
+    public ResponseEntity<MessageResponse> updateEvent(@RequestBody EditEventRequest editEventRequest) {
+        eventService.updateEvent(editEventRequest);
+        return ResponseEntity.ok(new MessageResponse("Zaktualizowano wydarzenie!"));
+    }
+
+    @DeleteMapping("/deleteEvent/{id}")
+    public ResponseEntity<MessageResponse> deleteEvent(@PathVariable Long id) {
+        eventService.deleteEvent(id);
+        return ResponseEntity.ok(new MessageResponse("Usunięto wydarzenie!"));
     }
 }

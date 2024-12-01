@@ -1,11 +1,16 @@
 package umg.harcmistrz.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.Event;
+import umg.harcmistrz.Models.FieldGame;
 import umg.harcmistrz.dto.EventDTO;
 import umg.harcmistrz.repository.EventRepository;
+import umg.harcmistrz.repository.FieldGameRepository;
+import umg.harcmistrz.repository.QR_CodeRepository;
+import umg.harcmistrz.requests.EditEventRequest;
 import umg.harcmistrz.requests.NewEventRequest;
 
 import java.util.List;
@@ -16,6 +21,12 @@ public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private FieldGameRepository fieldGameRepository;
+
+    @Autowired
+    private QR_CodeRepository qr_codeRepository;
 
     @Autowired
     private TeamService teamService;
@@ -38,8 +49,25 @@ public class EventService {
         return eventRepository.getEventsByTeamId(teamId);
     }
 
+    @Transactional
     public void deleteEvent(Long id) {
-        eventRepository.deleteById(id);
+        FieldGame fieldGame = fieldGameRepository.findByEventId(id);
+        if(fieldGame != null) {
+            qr_codeRepository.deleteAllByFieldGameId(fieldGame.getId());
+            fieldGameRepository.deleteByEventId(id);
+        }
+        eventRepository.findById(id).ifPresent(event -> eventRepository.delete(event));
+    }
+
+    public void updateEvent(EditEventRequest editEventRequest) {
+        Event event = eventRepository.findById(editEventRequest.getId()).orElse(null);
+        if (event != null) {
+            event.setName(editEventRequest.getName());
+            event.setDescription(editEventRequest.getDescription());
+            event.setDate(editEventRequest.getDate());
+            event.setLocation(editEventRequest.getLocation());
+            eventRepository.save(event);
+        }
     }
 
 }

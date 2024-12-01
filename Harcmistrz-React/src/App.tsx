@@ -14,6 +14,11 @@ import ManageEvent from './components/Events/ManageEvent';
 import NewFieldGame from './components/FieldGames/CreateFieldGame';
 import { ApiProvider } from './ApiContext';
 import QR_Codes from './components/FieldGames/QR_Codes';
+import New_QR_Code from './components/FieldGames/New_QR_Code';
+import Edit_QR_Code from './components/FieldGames/Edit_QR_Code';
+import EditEvent from './components/Events/EditEvent';
+import EditFieldGame from './components/FieldGames/EditFieldGame';
+import UserDashboard from './components/Pages/UserDashboard';
 
 function App() {
   const router = createBrowserRouter([
@@ -36,8 +41,16 @@ function App() {
     {
       path: '/dashboard',
       element: (
-        <ProtectedRoute allowedRoles={["TEAM_LEADER", "SCOUT"]}>
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <Dashboard />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/user-dashboard',
+      element: (
+        <ProtectedRoute allowedRoles={["SCOUT"]}>
+          <UserDashboard />
         </ProtectedRoute>
       ),
     },
@@ -93,7 +106,31 @@ function App() {
       path: '/new-qr-code/:eventId/:fieldGameId',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <QR_Codes />
+          <New_QR_Code />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/edit-qr-code/:eventId/:qrCodeId',
+      element: (
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
+          <Edit_QR_Code />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/edit-event/:id',
+      element: (
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
+          <EditEvent />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/edit-field-game/:eventId/:fieldGameId',
+      element: (
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
+          <EditFieldGame />
         </ProtectedRoute>
       )
     },

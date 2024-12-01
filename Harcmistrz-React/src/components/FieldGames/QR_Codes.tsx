@@ -140,7 +140,8 @@ const QR_Codes = () => {
                                             <button className="bg-p_green text-white py-1 px-2 rounded-lg mt-2 hover:text-s_brown">Pobierz kod QR</button>
                                         </a>
                                         )}
-                                        <button className="bg-a_yellow text-white py-1 px-2 rounded-lg mt-2">Zmodyfikuj informacje o kodzie</button>
+                                        <button className="bg-a_yellow text-white py-1 px-2 rounded-lg mt-2" 
+                                        onClick={() => navigate(`/edit-qr-code/${eventId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</button>
                                         <button className="bg-red-500 text-white py-1 px-2 rounded-lg mt-2" onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</button>
                                     </div>
                                 ))}

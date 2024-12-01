@@ -39,27 +39,33 @@ const New_QR_Code = () => {
             <Header />
             <main className="bg-a_yellow">
                 <div className="container mx-auto py-10 flex flex-col justify-center items-center">
-                    <h1 className="text-4xl font-bold text-a_blue">Nowy kod QR</h1>
+                    <h1 className="text-3xl text-white">Nowy kod QR</h1>
                     <div className="w-1/2 bg-white p-5 rounded-lg mt-5">
                         <form>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Opis kodu QR</label>
-                                <textarea className="mt-1 p-2 rounded-md w-full" 
+                                <textarea className="mt-1 p-2 rounded-md w-full border" 
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}required></textarea>
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Punkty, które można uzyskać za zeskanowanie kodu</label>
-                                <input type="number" className="mt-1 p-2 rounded-md w-full" 
+                                <input type="number" className="mt-1 p-2 rounded-md w-full border" 
                                 value={points}
                                 onChange={(e) => setPoints(e.target.valueAsNumber)}/>
                             </div>
-                            <button className="bg-a_blue text-white p-2 rounded-md w-full" onClick={generateQRCode}>Dodaj kod QR</button>
+                            <button className="bg-p_green text-white p-2 rounded-md w-full" onClick={generateQRCode}>Dodaj kod QR</button>
                         </form>
                     </div>
-                    <div className="w-1/2 bg-white p-5 rounded-lg mt-5">
-                        {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" />}
-                    </div>
+                    {qrCodeUrl &&
+                        <div className="w-1/2 bg-white p-5 rounded-lg mt-5">
+                            <h2 className="text-2xl text-center">Wygenerowany kod QR</h2>
+                            {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" />}
+                            <a href={qrCodeUrl} download="QRCode.png">
+                                <button className="bg-p_green text-white p-2 rounded-md w-full mt-2">Pobierz kod QR</button>
+                            </a>
+                        </div>
+                    }
                     <button className="w-1/4 mt-5 bg-s_brown py-1 rounded text-white" onClick={() => navigate(`/event/${eventId}`)}>Wróć do panelu wydarzenia</button>
                 </div>
             </main>

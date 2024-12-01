@@ -1,11 +1,14 @@
 package umg.harcmistrz.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.FieldGame;
 import umg.harcmistrz.dto.FieldGameDTO;
 import umg.harcmistrz.repository.FieldGameRepository;
+import umg.harcmistrz.repository.QR_CodeRepository;
+import umg.harcmistrz.requests.EditFieldGameRequest;
 import umg.harcmistrz.requests.NewFieldGameRequest;
 
 import java.util.List;
@@ -19,6 +22,9 @@ public class FieldGameService {
 
     @Autowired
     private final FieldGameRepository fieldGameRepository;
+
+    @Autowired
+    private final QR_CodeRepository qr_codeRepository;
 
     public void createNewFieldGame(NewFieldGameRequest newFieldGameRequest) {
         FieldGame fieldGame = new FieldGame();
@@ -41,15 +47,17 @@ public class FieldGameService {
         return fieldGameRepository.findAllByEventId(eventId);
     }
 
+    @Transactional
     public void deleteFieldGame(Long id) {
+        qr_codeRepository.deleteAllByFieldGameId(id);
         fieldGameRepository.deleteById(id);
     }
 
-    public void updateFieldGame(Long id, FieldGameDTO newFieldGameRequest) {
-        FieldGame fieldGame = fieldGameRepository.findById(id).orElse(null);
+    public void updateFieldGame(EditFieldGameRequest request) {
+        FieldGame fieldGame = fieldGameRepository.findById(request.getId()).orElse(null);
         if (fieldGame != null) {
-            fieldGame.setName(newFieldGameRequest.getName());
-            fieldGame.setDescription(newFieldGameRequest.getDescription());
+            fieldGame.setName(request.getName());
+            fieldGame.setDescription(request.getDescription());
             fieldGameRepository.save(fieldGame);
         }
     }

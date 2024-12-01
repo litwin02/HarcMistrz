@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import umg.harcmistrz.Models.FieldGame;
 import umg.harcmistrz.dto.FieldGameDTO;
 import umg.harcmistrz.dto.MessageResponse;
+import umg.harcmistrz.requests.EditFieldGameRequest;
 import umg.harcmistrz.requests.NewFieldGameRequest;
 import umg.harcmistrz.service.FieldGameService;
 
@@ -69,5 +70,17 @@ public class FieldGameController {
                         .eventId(fieldGame.getEvent().getId())
                         .build())
                 .collect(Collectors.toList()));
+    }
+
+    @PutMapping("/updateFieldGame")
+    public ResponseEntity<MessageResponse> updateFieldGame(@RequestBody EditFieldGameRequest request) {
+        fieldGameService.updateFieldGame(request);
+        return ResponseEntity.ok(new MessageResponse("Zaktualizowano grę terenową!"));
+    }
+
+    @DeleteMapping("/deleteFieldGame/{id}")
+    public ResponseEntity<MessageResponse> deleteFieldGame(@PathVariable Long id) {
+        fieldGameService.deleteFieldGame(id);
+        return ResponseEntity.ok(new MessageResponse("Usunięto grę terenową!"));
     }
 }
