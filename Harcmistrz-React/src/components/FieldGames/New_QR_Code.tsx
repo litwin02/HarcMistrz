@@ -1,4 +1,3 @@
-import Header from "../Partials/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApi } from "../../ApiContext";
 import { useState } from "react";
@@ -36,7 +35,6 @@ const New_QR_Code = () => {
 
     return (
         <>
-            <Header />
             <main className="bg-a_yellow">
                 <div className="container mx-auto py-10 flex flex-col justify-center items-center">
                     <h1 className="text-3xl text-white">Nowy kod QR</h1>

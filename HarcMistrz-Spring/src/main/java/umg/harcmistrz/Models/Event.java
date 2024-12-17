@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 
 @Builder
@@ -28,4 +29,10 @@ public class Event {
 
     @OneToOne(mappedBy = "event")
     private FieldGame fieldGame;
+
+    @OneToMany(mappedBy = "event")
+    private List<EventParticipation> eventParticipations;
 }
+
+
+

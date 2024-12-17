@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../../ApiContext';
-import Header from '../Partials/Header';
 import { useState } from 'react';
 import { MessageResponse } from '../Models/MessageResponse';
 import { useParams } from 'react-router-dom';
@@ -75,7 +74,6 @@ const EditFieldGame = () => {
 
     return (
         <>
-        <Header />
         <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
             <h2 className='text-3xl mb-5'>Edytuj grę terenową</h2>
             <form onSubmit={editFieldGame}>

@@ -1,4 +1,3 @@
-import Header from "../Partials/Header";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +20,6 @@ export default function MainPage(){
 
     return(
     <>
-        <Header />
         <main>
             <div className="bg-p_green pt-20 lg:px-20 text-white">
                 <div className="flex-col grid justify-center items-center text-center">

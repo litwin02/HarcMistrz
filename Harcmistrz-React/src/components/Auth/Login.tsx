@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../Partials/Header';
 import { Roles } from '../Models/Roles';
 
 interface LoginResponse {
@@ -61,7 +60,6 @@ const LoginForm = () => {
 
   return (
     <>
-    <Header />
     <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
       <h2 className='text-3xl mb-5'>Zaloguj się</h2>
       <form onSubmit={handleLogin}>

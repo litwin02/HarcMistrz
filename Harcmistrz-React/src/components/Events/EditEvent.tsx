@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { Event } from '../Models/EventModel';
 import { useQuery } from 'react-query';
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import Header from '../Partials/Header';
 import React from 'react';
 import { useState } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -103,7 +102,6 @@ const EditEvent = () => {
 
     return (
         <>
-            <Header />
             <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
             <h2 className='text-3xl mb-5'>Edytuj wydarzenie {eventData?.name}</h2>
             <form onSubmit={editEvent}>

@@ -3,8 +3,18 @@ import { useQuery } from 'react-query';
 import { useApi } from '../../ApiContext';
 import { Event } from '../Models/EventModel';
 import dayjs from "dayjs";
-import Header from '../Partials/Header';
 import { useNavigate } from 'react-router-dom';
+import { MainBox } from '../shared/main-box';
+import { MainPageHeader } from '../shared/main-page-header';
+import { WhiteBoxColumn } from '../shared/white-box-column';
+import { WhiteBox } from '../shared/white-box';
+import { SharedP } from '../shared/shared-p';
+import { BoldText } from '../shared/bold-text';
+import { GreenButton } from '../shared/shared-green-button';
+import { YellowButton } from '../shared/yellow_button';
+import { RedButton } from '../shared/red-button';
+import { ButtonContainer } from '../shared/button-container';
+import { ReturnButton } from '../shared/shared-return-button';
 
 
 const ManageEvent = () => {
@@ -35,7 +45,7 @@ const ManageEvent = () => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        if(response.status == 404){
+        if (response.status == 404) {
             throw new Error("Brak gier terenowych dla tego wydarzenia.");
         }
         if (!response.ok) {
@@ -61,8 +71,8 @@ const ManageEvent = () => {
 
     const handleDeleteFieldGame = async (fieldGameId: string) => {
         const confirmDelete = window.confirm("Czy na pewno chcesz usunąć tę grę terenową? UWAGA! Usunięcie gry terenowej spowoduje usunięcie wszystkich powiązanych z nią kodów QR.");
-        if(confirmDelete){
-            try{
+        if (confirmDelete) {
+            try {
                 const response = await fetch(`${API_BASE_URL}/fieldGames/deleteFieldGame/${fieldGameId}`, {
                     method: 'DELETE',
                     headers: {
@@ -84,8 +94,8 @@ const ManageEvent = () => {
 
     const handleDeleteEvent = async () => {
         const confirmDelete = window.confirm("Czy na pewno chcesz usunąć to wydarzenie? UWAGA! Usunięcie wydarzenia spowoduje usunięcie wszystkich powiązanych z nim gier terenowych i kodów QR.");
-        if(confirmDelete){
-            try{
+        if (confirmDelete) {
+            try {
                 const response = await fetch(`${API_BASE_URL}/events/deleteEvent/${id}`, {
                     method: 'DELETE',
                     headers: {
@@ -104,44 +114,51 @@ const ManageEvent = () => {
             }
         };
     };
-    
-    return (
-        <>
-            <Header />
-            <main className='bg-a_yellow'>
-                <div className='container mx-auto py-10 flex flex-col justify-center items-center'>
-                    <h1 className='text-3xl text-center text-white'>Nazwa wydarzenia: {eventData?.name}</h1>
-                    <div className="w-1/2 flex flex-col justify-between bg-white p-5 rounded-lg mt-10">
-                        <p>Opis: {eventData?.description}</p>
-                        <p>Data: {eventData?.date?.format('DD-MM-YYYY HH:mm')}</p>
-                        <p>Lokalizacja: {eventData?.location}</p>
-                        <button className="w-1/4 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/edit-event/${eventData?.id}`)}>Edytuj wydarzenie</button>
-                        <button className="w-1/4 mt-1 bg-red-500 py-1 rounded text-white hover:text-s_brown" onClick={handleDeleteEvent}>Usuń wydarzenie</button>
-                    </div>
-                    <div className="w-1/2 bg-white p-5 rounded-lg mt-10">
-                        <h2 className="text-xl">Gry terenowe:</h2>
-                        {fieldGamesIsLoading && <p>Ładowanie...</p>}
-                        {fieldGamesError && <p>{fieldGamesError.message}</p>}
-                        {fieldGames?.length > 0 ? (fieldGames.map((fieldGame: any) => {
-                            return <div key={fieldGame.id} className="w-1/2 flex flex-col justify-between mb-5">
-                                <p>Nazwa: {fieldGame.name}</p>
-                                <p>Opis: {fieldGame.description}</p>
-                                <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" 
-                                onClick={() => navigate(`/edit-field-game/${eventData.id}/${fieldGame.id}`)}>Edytuj grę terenową</button>
-                                <button className="w-1/2 mt-1 bg-red-500 py-1 rounded text-white hover:text-s_brown"
-                                onClick={() => handleDeleteFieldGame(fieldGame.id)}>Usuń grę terenową</button>
-                                <button className="w-1/2 mt-1 bg-a_yellow py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/qr-codes/${eventData.id}/${fieldGame.id}`)}>Zarządzaj kodami QR</button>
-                                <button className="w-1/2 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate("")}>Aktywuj grę</button>
-                            </div>
-                        }) ) : 
-                        <button className="w-1/4 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" 
-                        onClick={() => navigate(`/new-field-game/${eventData?.id}`)}>Dodaj grę terenową</button>}
-                    </div>
-                    <button className="bg-p_green p-2 text-xl mt-4 rounded text-white" onClick={() => navigate('/dashboard')}>Powrót do panelu głównego</button>
-                </div>
 
-            </main>
-        </>
+    return (
+        <MainBox>
+            <MainPageHeader>Nazwa wydarzenia: {eventData?.name}</MainPageHeader>
+            <WhiteBoxColumn>
+                {eventData &&
+                    <WhiteBox>
+                        <SharedP><BoldText>Opis:</BoldText> {eventData.description}</SharedP>
+                        <SharedP><BoldText>Data:</BoldText> {eventData.date.format('DD-MM-YYYY HH:mm')}</SharedP>
+                        <SharedP><BoldText>Lokalizacja:</BoldText> {eventData.location}</SharedP>
+                        <ButtonContainer>
+                            <YellowButton onClick={() => navigate(`/edit-event/${eventData.id}`)}>Edytuj wydarzenie</YellowButton>
+                            <RedButton onClick={handleDeleteEvent}>Usuń wydarzenie</RedButton>
+                        </ButtonContainer>
+
+                    </WhiteBox>
+                }
+
+                {fieldGamesIsLoading && <SharedP>Ładowanie...</SharedP>}
+                {fieldGamesError && <SharedP>{fieldGamesError.message}</SharedP>}
+
+                {fieldGames?.length > 0 ?
+                    (fieldGames.map((fieldGame: any) => {
+                        return <WhiteBox key={fieldGame.id}>
+                            <SharedP><BoldText>Nazwa:</BoldText> {fieldGame.name}</SharedP>
+                            <SharedP><BoldText>Opis:</BoldText> {fieldGame.description}</SharedP>
+                            <ButtonContainer>
+                                <YellowButton onClick={() => navigate(`/edit-field-game/${eventData.id}/${fieldGame.id}`)}>Edytuj grę terenową</YellowButton>
+                                <RedButton onClick={() => handleDeleteFieldGame(fieldGame.id)}>Usuń grę terenową</RedButton>
+                                <YellowButton onClick={() => navigate(`/qr-codes/${eventData.id}/${fieldGame.id}`)}>Zarządzaj kodami QR</YellowButton>
+                                <GreenButton onClick={() => navigate("")}>Aktywuj grę</GreenButton>
+                            </ButtonContainer>
+                        </WhiteBox>
+
+                    })
+                    ) : (
+                        <WhiteBox>
+                            <SharedP>Brak gier terenowych dla tego wydarzenia.</SharedP>
+                            <ButtonContainer><GreenButton onClick={() => navigate(`/new-field-game/${eventData.id}`)}>Dodaj grę terenową</GreenButton></ButtonContainer>
+                        </WhiteBox>
+                    )}
+                <ReturnButton to="/dashboard">Wróć do panelu głównego</ReturnButton>
+            </WhiteBoxColumn>
+
+        </MainBox>
     );
 };
 

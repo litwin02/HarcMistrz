@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Header from "../Partials/Header"
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { BasicTeamResponse } from "../Models/BasicTeamResponse";
 import { MessageResponse } from "../Models/MessageResponse";
@@ -110,7 +109,6 @@ const NewEvent = () => {
 
     return(
         <>
-        <Header />
         <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
             <h2 className='text-3xl mb-5'>Utwórz nowe wydarzenie dla zespołu</h2>
             <form onSubmit={createNewEvent}>

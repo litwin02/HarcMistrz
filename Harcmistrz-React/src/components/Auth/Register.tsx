@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { User } from "../Models/User"
-import Header from "../Partials/Header";
 import { Roles } from "../Models/Roles";
 
 interface RegisterResponse{
@@ -62,7 +61,6 @@ const RegisterForm = () => {
 
     return(
         <>
-            <Header />
             <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
             <h2 className='text-3xl mb-5'>Zarejestruj się</h2>
             <form onSubmit={handleRegistration}>

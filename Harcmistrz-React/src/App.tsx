@@ -19,20 +19,28 @@ import Edit_QR_Code from './components/FieldGames/Edit_QR_Code';
 import EditEvent from './components/Events/EditEvent';
 import EditFieldGame from './components/FieldGames/EditFieldGame';
 import UserDashboard from './components/Pages/UserDashboard';
+import Layout from './Layout';
+import AvaliableEvents from './components/Events/AvaliableEvents';
 
 function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <MainPage />,
+      element: (<Layout>
+        <MainPage />
+      </Layout>),
     },
     {
       path: '/login',
-      element: <Login />,
+      element: (<Layout>
+        <Login />
+      </Layout>),
     },
     {
       path: '/register',
-      element: <Register />
+      element: (<Layout>
+        <Register />
+      </Layout>)
     },
     {
       path: 'logout',
@@ -42,7 +50,9 @@ function App() {
       path: '/dashboard',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <Dashboard />
+          <Layout>
+            <Dashboard />
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -50,7 +60,9 @@ function App() {
       path: '/user-dashboard',
       element: (
         <ProtectedRoute allowedRoles={["SCOUT"]}>
-          <UserDashboard />
+          <Layout>
+            <UserDashboard />
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -58,7 +70,9 @@ function App() {
       path: '/create-new-team',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <CreateNewTeam />
+          <Layout>
+            <CreateNewTeam />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -66,7 +80,9 @@ function App() {
       path: '/join-team',
       element: (
         <ProtectedRoute allowedRoles={["SCOUT"]}>
-          <AddScoutToTeam />
+          <Layout>
+            <AddScoutToTeam />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -74,7 +90,9 @@ function App() {
       path: 'create-new-event',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <CreateNevEvent />
+          <Layout>
+            <CreateNevEvent />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -82,7 +100,9 @@ function App() {
       path: '/event/:id',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <ManageEvent />
+          <Layout>
+            <ManageEvent />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -90,7 +110,9 @@ function App() {
       path: '/new-field-game/:eventId',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <NewFieldGame />
+          <Layout>
+            <NewFieldGame />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -98,7 +120,9 @@ function App() {
       path: '/qr-codes/:eventId/:fieldGameId',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <QR_Codes />
+          <Layout>
+            <QR_Codes />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -106,7 +130,9 @@ function App() {
       path: '/new-qr-code/:eventId/:fieldGameId',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <New_QR_Code />
+          <Layout>
+            <New_QR_Code />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -114,7 +140,9 @@ function App() {
       path: '/edit-qr-code/:eventId/:qrCodeId',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <Edit_QR_Code />
+          <Layout>
+            <Edit_QR_Code />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -122,7 +150,9 @@ function App() {
       path: '/edit-event/:id',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <EditEvent />
+          <Layout>
+            <EditEvent />
+          </Layout>
         </ProtectedRoute>
       )
     },
@@ -130,10 +160,22 @@ function App() {
       path: '/edit-field-game/:eventId/:fieldGameId',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
-          <EditFieldGame />
+          <Layout>
+            <EditFieldGame />
+          </Layout>
         </ProtectedRoute>
       )
     },
+    {
+      path: '/available-events/:teamId',
+      element: (
+        <ProtectedRoute allowedRoles={["SCOUT"]}>
+          <Layout>
+            <AvaliableEvents />
+          </Layout>
+        </ProtectedRoute>
+      )
+    }
 
   ]);
 

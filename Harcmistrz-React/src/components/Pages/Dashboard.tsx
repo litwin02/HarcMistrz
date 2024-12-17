@@ -1,9 +1,18 @@
-import Header from "../Partials/Header";
 import { useState, useEffect } from "react";
 import { useApi } from "../../ApiContext";
 import { useNavigate } from "react-router-dom";
 import { BasicTeamResponse } from "../Models/BasicTeamResponse";
 import dayjs from "dayjs";
+import { MainBox } from "../shared/main-box";
+import { MainPageHeader } from "../shared/main-page-header";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { WhiteBox } from "../shared/white-box";
+import { SharedH2 } from "../shared/shared-h2";
+import { SharedP } from "../shared/shared-p";
+import { BoldText } from "../shared/bold-text";
+import { GreenButton } from "../shared/shared-green-button";
+import { YellowButton } from "../shared/yellow_button";
+import { Message } from "../shared/message";
 
 const Dashboard = () => {
     const id = localStorage.getItem('id');
@@ -22,7 +31,7 @@ const Dashboard = () => {
                 setError(null);
                 try {
                     const fetchedTeam = await getTeamForLeader();
-                    
+
                     if (fetchedTeam) {
                         await getEventsForLeader(fetchedTeam.id);
                     }
@@ -30,7 +39,7 @@ const Dashboard = () => {
                     throw e;
                 }
             };
-    
+
             fetchData();
         }
     }, [role]);
@@ -46,22 +55,22 @@ const Dashboard = () => {
     const getTeamForLeader = async () => {
         setError(null);
 
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/teams/getTeamByTeamLeaderId/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userToken}` 
+                    'Authorization': `Bearer ${userToken}`
                 },
             });
-            if(response.status === 404){
+            if (response.status === 404) {
                 setError("Nie znaleziono żadnej drużyny!");
             }
             const fetchedTeam = await response.json();
             setTeam(fetchedTeam);
             return fetchedTeam;
         }
-        catch(e: any){
+        catch (e: any) {
             throw e;
         }
     }
@@ -69,66 +78,54 @@ const Dashboard = () => {
     const getEventsForLeader = async (teamId: number) => {
         setError(null);
 
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/events/getAllEventsByTeamId/${teamId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userToken}` 
+                    'Authorization': `Bearer ${userToken}`
                 },
             });
-            if(response.status === 404){
+            if (response.status === 404) {
                 setError("Nie znaleziono żadnych wydarzeń!");
             }
             const fetchedEvents = await response.json();
             fetchedEvents.forEach((event: any) => {
                 event.date = dayjs(event.date).format('DD-MM-YYYY HH:mm');
             });
-            setEvents(fetchedEvents);            
+            setEvents(fetchedEvents);
         }
-        catch(e: any){
+        catch (e: any) {
             throw e;
         }
     }
 
-    return(
-        <>
-        <Header />
-            <main className="bg-a_yellow">
-                <div className="container mx-auto py-10">
-                    <h1 className="text-3xl text-center">Witaj w centrum dowodzenia</h1>
-                    <div className="flex flex-col justify-center items-center mt-10">
-                        {team && 
-                        <div className="w-1/2 bg-white p-5 rounded-lg mb-10">
-                            <h2 className="text-xl">Twoje drużyna:</h2>
-                            <p>Zespół: {team.name}</p>
-                            <p>Kod zespołu: {team.joinCode}</p>
-                            <button className="bg-a_yellow p-1 mt-1 rounded hover:text-s_brown" onClick={(navigateToTeamManagement)}>Zarządzaj swoją drużyną</button>
-                        </div>
-                        }
-                        {team && 
-                        <div className="w-1/2 bg-white p-5 rounded-lg mb-10">
-                            <h2 className="text-xl">Twoje wydarzenia:</h2>
-                            {!events && <p>Brak wydarzeń</p>}
-                            {events && events.map((event) => {
-                                return <div key={event.id} className="w-1/2 flex flex-col justify-between mb-5">
-                                    <p>Nazwa: {event.name}</p>
-                                    <p>Opis: {event.description}</p>
-                                    <p>Lokalizacja: {event.location}</p>
-                                    <p>Data: {event.date}</p>
-                                    <button className="w-1/2 mt-1 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigateToEventManagement(event.id)}>Zarządzaj wydarzeniem</button>
-                                </div>
-                            })}
-                            <button className="bg-p_green p-1 mt-1 rounded text-white" onClick={() => navigate('/create-new-event')}>Stwórz nowe wydarzenie</button>
-                        </div>
-                        }
-                        {error && <p className="text-red-800">{error}</p>}
-                        {!team && <button className="bg-p_green p-2 text-xl mt-4 rounded text-white" onClick={() => navigate('/create-new-team')}>Stwórz nową drużynę</button>}
-                    </div>
-                    
-                </div>
-            </main>
-        </>
+    return (
+        <MainBox>
+            <MainPageHeader>Witaj w centrum dowodzenia</MainPageHeader>
+            <WhiteBoxColumn>
+                {team &&
+                    <WhiteBox>
+                        <SharedH2><BoldText>Twoja drużyna</BoldText> </SharedH2>
+                        <SharedP><BoldText>Zespół:</BoldText> {team.name}</SharedP>
+                        <SharedP><BoldText>Kod zespołu:</BoldText> {team.joinCode}</SharedP>
+                        <GreenButton onClick={() => navigate('/create-new-event')}>Dodaj nowe wydarzenie</GreenButton>
+                    </WhiteBox>
+                }
+                {events?.map((event) => (
+                    <WhiteBox key={event.id}>
+                        <SharedH2><BoldText>Nazwa:</BoldText> {event.name}</SharedH2>
+                        <SharedP><BoldText>Opis:</BoldText> {event.description}</SharedP>
+                        <SharedP><BoldText>Lokalizacja:</BoldText> {event.location}</SharedP>
+                        <SharedP><BoldText>Data:</BoldText> {event.date}</SharedP>
+                        <YellowButton onClick={() => navigateToEventManagement(event.id)}>Zarządzaj wydarzeniem</YellowButton>
+                    </WhiteBox>
+                ))}
+                {!team && <GreenButton onClick={() => navigate('/create-new-team')}>Stwórz nową drużynę</GreenButton>}
+                {error && <Message>{error}</Message>}
+            </WhiteBoxColumn>
+        </MainBox>
+
     )
 }
 

@@ -6,26 +6,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "team_scouts")
-public class ScoutInTeam {
+@Entity(name = "event_participation")
+public class EventParticipation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "team_Id", nullable = false)
-    private Team team;
+    @JoinColumn(name = "scout_in_team_id")
+    private ScoutInTeam scoutInTeam;
 
     @ManyToOne
-    @JoinColumn(name = "scout_Id", nullable = false)
-    private User scout;
+    @JoinColumn(name = "event_id")
+    private Event event;
 
-    @OneToMany(mappedBy = "scoutInTeam")
-    private List<EventParticipation> eventParticipations;
 }
+
+

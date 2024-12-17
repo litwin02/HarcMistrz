@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../ApiContext";
-import Header from "../Partials/Header";
 import { FieldGameDTO } from "../Models/FieldGameDTO";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -115,7 +114,6 @@ const QR_Codes = () => {
 
     return (
         <>
-            <Header />
             <main className="bg-a_yellow">
                 <div className="container mx-auto py-10 flex flex-col justify-center items-center">
                     <h1 className="text-3xl text-center text-white">Kody QR Gry Terenowej: {fieldGame?.name}</h1>

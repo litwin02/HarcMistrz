@@ -25,7 +25,7 @@ public class FieldGameController {
     @PostMapping("/createNewFieldGame")
     public ResponseEntity<MessageResponse> createNewFieldGame(@RequestBody NewFieldGameRequest newFieldGameRequest) {
         fieldGameService.createNewFieldGame(newFieldGameRequest);
-        return ResponseEntity.ok(new MessageResponse("Utworzono nowe pole gry!"));
+        return ResponseEntity.ok(new MessageResponse("Utworzono nową grę terenową!"));
     }
 
     @GetMapping("/getFieldGameById/{id}")
