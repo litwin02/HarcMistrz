@@ -42,25 +42,25 @@ public class EventParticipationService {
             eventParticipation.setScoutInTeam(
                     scoutInTeamRepository.findByScoutId(newEventParticipationRequest.getScoutId()).getFirst());
         } catch (Exception e) {
-            return new MessageResponse("Nie znaleziono harcerza w drużynie.");
+            return new MessageResponse("Nie znaleziono harcerza w drużynie.", false);
         }
         try {
             eventParticipation.setEvent(eventRepository.findById(newEventParticipationRequest.getEventId()).orElse(null));
         } catch (Exception e) {
-            return new MessageResponse("Nie znaleziono wydarzenia.");
+            return new MessageResponse("Nie znaleziono wydarzenia.", false);
         }
         eventParticipationRepository.save(eventParticipation);
 
-        return new MessageResponse("Zostałeś dodany do wydarzenia!");
+        return new MessageResponse("Zostałeś dodany do wydarzenia!", true);
     }
 
     public MessageResponse deleteEventParticipation(Long eventParticipationId) {
         try {
             eventParticipationRepository.deleteById(eventParticipationId);
         } catch (Exception e) {
-            return new MessageResponse("Usunięcie uczestnictwa w wydarzeniu nie powiodło się.");
+            return new MessageResponse("Usunięcie uczestnictwa w wydarzeniu nie powiodło się.", false);
         }
-        return new MessageResponse("Usunięto uczestnictwo w wydarzeniu.");
+        return new MessageResponse("Usunięto uczestnictwo w wydarzeniu.", true);
     }
 
     // PRIVATE METHODS

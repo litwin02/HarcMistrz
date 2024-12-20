@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.ScoutInTeam;
 import umg.harcmistrz.Models.Team;
 import umg.harcmistrz.Models.User;
+import umg.harcmistrz.dto.TeamMemberDTO;
 import umg.harcmistrz.repository.ScoutInTeamRepository;
 import umg.harcmistrz.repository.TeamRepository;
 import java.util.List;
@@ -76,6 +77,60 @@ public class TeamService {
             return null;
         }
         return scoutInTeam.getFirst().getTeam();
+    }
+
+    public List<TeamMemberDTO> getTeamMembers(long teamId) {
+        Team team = getTeamById(teamId);
+        if (team == null) {
+            return null;
+        }
+        List<ScoutInTeam> scoutInTeam = scoutInTeamRepository.findByTeamId(teamId);
+        if (scoutInTeam.isEmpty()) {
+            return null;
+        }
+        return scoutInTeam.stream()
+                .map(s -> TeamMemberDTO.builder()
+                        .scoutId(s.getScout().getId())
+                        .firstName(s.getScout().getFirstName())
+                        .lastName(s.getScout().getLastName())
+                        .email(s.getScout().getEmail())
+                        .build())
+                .toList();
+    }
+
+    public String removeScoutFromTeam(long scoutId, long teamId) {
+        Team team = getTeamById(teamId);
+        if (team == null) {
+            return "Nie ma takiej drużyny!";
+        }
+        List<ScoutInTeam> scoutInTeam = scoutInTeamRepository.findByScoutId(scoutId);
+        if (scoutInTeam.isEmpty()) {
+            return "Nie ma takiego harcerza!";
+        }
+        if (scoutInTeam.getFirst().getTeam().getId() != teamId) {
+            return "Ten harcerz nie należy do tej drużyny!";
+        }
+        scoutInTeamRepository.delete(scoutInTeam.getFirst());
+        return "Usunięto harcerza z drużyny!";
+    }
+
+    public String updateTeamName(long teamId, String teamName) {
+        Team team = getTeamById(teamId);
+        if (team == null) {
+            return "Nie ma takiej drużyny!";
+        }
+        team.setName(teamName);
+        teamRepository.save(team);
+        return "Zaktualizowano nazwę drużyny!";
+    }
+
+    public String deleteTeam(long teamId) {
+        Team team = getTeamById(teamId);
+        if (team == null) {
+            return "Nie ma takiej drużyny!";
+        }
+        teamRepository.delete(team);
+        return "Usunięto drużynę!";
     }
 
 

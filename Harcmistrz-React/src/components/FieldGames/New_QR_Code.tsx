@@ -1,6 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useApi } from "../../ApiContext";
 import { useState } from "react";
+import { MainBox } from "../shared/main-box";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { MainPageHeader } from "../shared/main-page-header";
+import { WhiteBox } from "../shared/white-box";
+import { FormDiv } from "../shared/form-div";
+import { FormLabel } from "../shared/form-label";
+import { GreenButton } from "../shared/shared-green-button";
+import { ReturnButton } from "../shared/shared-return-button";
+import { SharedH2 } from "../shared/shared-h2";
 
 const New_QR_Code = () => {
     const navigate = useNavigate();
@@ -32,42 +41,40 @@ const New_QR_Code = () => {
 
     const [description, setDescription] = useState<string>("");
     const [points, setPoints] = useState<number>(0);
+    const returnString = `/qr-codes/${eventId}/${fieldGameId}`;
 
     return (
-        <>
-            <main className="bg-a_yellow">
-                <div className="container mx-auto py-10 flex flex-col justify-center items-center">
-                    <h1 className="text-3xl text-white">Nowy kod QR</h1>
-                    <div className="w-1/2 bg-white p-5 rounded-lg mt-5">
-                        <form>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Opis kodu QR</label>
+        <MainBox>
+                <WhiteBoxColumn>
+                    <MainPageHeader>Nowy kod QR</MainPageHeader>
+                    <WhiteBox>
+                    <form onSubmit={generateQRCode}>
+                            <FormDiv>
+                                <FormLabel>Opis kodu QR</FormLabel>
                                 <textarea className="mt-1 p-2 rounded-md w-full border" 
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}required></textarea>
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Punkty, które można uzyskać za zeskanowanie kodu</label>
+                            </FormDiv>
+                            <FormDiv>
+                                <FormLabel>Punkty, jakie można uzyskać za zeskanowanie kodu</FormLabel>
                                 <input type="number" className="mt-1 p-2 rounded-md w-full border" 
                                 value={points}
                                 onChange={(e) => setPoints(e.target.valueAsNumber)}/>
-                            </div>
-                            <button className="bg-p_green text-white p-2 rounded-md w-full" onClick={generateQRCode}>Dodaj kod QR</button>
+                            </FormDiv>
+                            <GreenButton type="submit">Generuj kod QR</GreenButton>
                         </form>
-                    </div>
+                    </WhiteBox>
                     {qrCodeUrl &&
-                        <div className="w-1/2 bg-white p-5 rounded-lg mt-5">
-                            <h2 className="text-2xl text-center">Wygenerowany kod QR</h2>
-                            {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" />}
+                    <WhiteBox>
+                        <SharedH2>Wygenerowany kod QR</SharedH2>
+                        {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" />}
                             <a href={qrCodeUrl} download="QRCode.png">
-                                <button className="bg-p_green text-white p-2 rounded-md w-full mt-2">Pobierz kod QR</button>
+                                <GreenButton>Pobierz kod QR</GreenButton>
                             </a>
-                        </div>
-                    }
-                    <button className="w-1/4 mt-5 bg-s_brown py-1 rounded text-white" onClick={() => navigate(`/event/${eventId}`)}>Wróć do panelu wydarzenia</button>
-                </div>
-            </main>
-        </>
+                        </WhiteBox>}
+                    <ReturnButton to={returnString}>Wróć do kodów QR</ReturnButton>
+                </WhiteBoxColumn>
+        </MainBox>
     );
     
 };

@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageResponse {
-    private String message;
-    private boolean success;
+public class TeamMemberDTO {
+    private Long scoutId;
+    private String firstName;
+    private String lastName;
+    private String email;
 }

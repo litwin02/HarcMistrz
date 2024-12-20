@@ -25,7 +25,7 @@ public class EventController {
     @PostMapping("/createNewEvent")
     public ResponseEntity<MessageResponse> createNewEvent(@RequestBody NewEventRequest newEventRequest) {
         eventService.createNewEvent(newEventRequest);
-        return ResponseEntity.ok(new MessageResponse("Utworzono nowe wydarzenie!"));
+        return ResponseEntity.ok(new MessageResponse("Utworzono nowe wydarzenie!", true));
     }
 
     @GetMapping("/getAllEventsByTeamId/{teamId}")
@@ -61,12 +61,12 @@ public class EventController {
     @PutMapping("/updateEvent")
     public ResponseEntity<MessageResponse> updateEvent(@RequestBody EditEventRequest editEventRequest) {
         eventService.updateEvent(editEventRequest);
-        return ResponseEntity.ok(new MessageResponse("Zaktualizowano wydarzenie!"));
+        return ResponseEntity.ok(new MessageResponse("Zaktualizowano wydarzenie!", true));
     }
 
     @DeleteMapping("/deleteEvent/{id}")
     public ResponseEntity<MessageResponse> deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
-        return ResponseEntity.ok(new MessageResponse("Usunięto wydarzenie!"));
+        return ResponseEntity.ok(new MessageResponse("Usunięto wydarzenie!", true));
     }
 }

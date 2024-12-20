@@ -25,4 +25,7 @@ public class QR_Code {
     private int points;
     private boolean scanned;
     private String description;
+
+    @OneToOne(mappedBy = "qrCode", cascade = CascadeType.ALL)
+    private QR_Scan qrScan;
 }

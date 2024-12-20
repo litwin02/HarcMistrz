@@ -25,6 +25,6 @@ public class FieldGame {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @OneToMany(mappedBy = "fieldGame")
+    @OneToMany(mappedBy = "fieldGame", cascade = CascadeType.ALL)
     private List<QR_Code> qrCodes;
 }

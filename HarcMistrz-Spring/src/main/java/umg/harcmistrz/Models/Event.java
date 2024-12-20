@@ -27,10 +27,10 @@ public class Event {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @OneToOne(mappedBy = "event")
+    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
     private FieldGame fieldGame;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<EventParticipation> eventParticipations;
 }
 

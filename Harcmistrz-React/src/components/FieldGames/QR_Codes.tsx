@@ -5,6 +5,19 @@ import { FieldGameDTO } from "../Models/FieldGameDTO";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { QR_CodeDTO } from "../Models/QR_CodeDTO";
+import MainPage from "../Pages/MainPage";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { MainPageHeader } from "../shared/main-page-header";
+import { BoldText } from "../shared/bold-text";
+import { WhiteBox } from "../shared/white-box";
+import { MainBox } from "../shared/main-box";
+import { SharedP } from "../shared/shared-p";
+import { GreenButton } from "../shared/shared-green-button";
+import { YellowButton } from "../shared/yellow_button";
+import { ButtonContainer } from "../shared/button-container";
+import { RedButton } from "../shared/red-button";
+import { ReturnButton } from "../shared/shared-return-button";
+import { HorizontalButtonContainer } from "../shared/horizontal-button-container";
 
 
 const QR_Codes = () => {
@@ -14,12 +27,12 @@ const QR_Codes = () => {
     const { fieldGameId } = useParams<{ fieldGameId: string }>();
 
     useEffect(() => {
-        getFieldGameById(fieldGameId? fieldGameId : "");
+        getFieldGameById(fieldGameId ? fieldGameId : "");
     }, []);
 
     const [fieldGame, setFieldGame] = useState<FieldGameDTO>();
     const getFieldGameById = async (id: string) => {
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/fieldGames/getFieldGameById/${id}`, {
                 method: 'GET',
                 headers: {
@@ -36,9 +49,9 @@ const QR_Codes = () => {
             console.error(error);
         }
     };
-        
+
     const getQRCodesInfoByFieldGameId = async (id: string): Promise<any> => {
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/qr_codes/getQRCodesInfoByFieldGameId/${id}`, {
                 method: 'GET',
                 headers: {
@@ -51,14 +64,14 @@ const QR_Codes = () => {
             }
             const responseJson = await response.json();
             return responseJson;
-        } 
+        }
         catch (error) {
             console.error(error);
         }
     };
 
     const getQRCodeImageByQRCodeId = async (id: string): Promise<any> => {
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/qr_codes/getQRCodeImageByQRCodeId/${id}`, {
                 method: 'GET',
                 headers: {
@@ -76,7 +89,7 @@ const QR_Codes = () => {
             console.error(error);
         }
     };
-        
+
 
     const { data: qrCodes, error: qrCodesError, isLoading: qrCodesIsLoading } = useQuery<QR_CodeDTO[], Error>(
         ['qrCodes', fieldGameId],
@@ -92,8 +105,8 @@ const QR_Codes = () => {
 
     const handleQRCodeDelete = async (qrCode: string) => {
         const confirmDelete = window.confirm("Czy na pewno chcesz usunąć ten kod QR?");
-        if(confirmDelete){
-            try{
+        if (confirmDelete) {
+            try {
                 const response = await fetch(`${API_BASE_URL}/qr_codes/deleteQRCode/${qrCode}`, {
                     method: 'DELETE',
                     headers: {
@@ -113,49 +126,51 @@ const QR_Codes = () => {
     };
 
     return (
-        <>
-            <main className="bg-a_yellow">
-                <div className="container mx-auto py-10 flex flex-col justify-center items-center">
-                    <h1 className="text-3xl text-center text-white">Kody QR Gry Terenowej: {fieldGame?.name}</h1>
-                    <div className="w-1/2 bg-white p-5 rounded-lg mt-10">
-                        <div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {qrCodesIsLoading && <p>Ładowanie...</p>}
-                                {qrCodesError && <p>Wystąpił błąd: {qrCodesError.message}</p>}
-                                {qrCodes && qrCodes.map((qrCode: any, index: any) => (
-                                    <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md">
-                                        <p>Opis: {qrCode.description}</p>
-                                        <p>Punkty: {qrCode.points}</p>
-                                        <p>Zeskanowany: {qrCode.scanned ? "Tak" : "Nie"}</p>
-                                        {qrCodeImagesIsLoading && <p>Ładowanie obrazka...</p>}
-                                        {qrCodeImagesError && <p>Wystąpił błąd: {qrCodeImagesError.message}</p>}
-                                        {qrCodeImages && qrCodeImages[index] && (
-                                            <img src={qrCodeImages[index]} alt="Kod QR" className="mt-2" />
-                                        )}
-                                        {qrCodeImages && qrCodeImages[index] && (
-                                        <a href={qrCodeImages[index]}
-                                            download={`QRCode_${qrCode.qrCode}.png`}>
-                                            <button className="bg-p_green text-white py-1 px-2 rounded-lg mt-2 hover:text-s_brown">Pobierz kod QR</button>
+        <MainBox>
+            <WhiteBoxColumn>
+                <MainPageHeader>Kody QR gry: <BoldText>{fieldGame?.name}</BoldText></MainPageHeader>
+                <WhiteBox>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {qrCodesIsLoading && <p>Ładowanie...</p>}
+                    {qrCodesError && <p>Wystąpił błąd: {qrCodesError.message}</p>}
+                    {qrCodes && qrCodes.map((qrCode: any, index: any) => (
+                        <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
+                            <SharedP><BoldText>Opis:</BoldText> {qrCode.description}</SharedP>
+                            <SharedP><BoldText>Punkty:</BoldText> {qrCode.points}</SharedP>
+                            <SharedP><BoldText>Zeskanowany:</BoldText> {qrCode.scanned ? "Tak" : "Nie"}</SharedP>
+
+                            {qrCodeImagesIsLoading && <SharedP>Ładowanie obrazka...</SharedP>}
+                            {qrCodeImagesError && <SharedP>Wystąpił błąd: {qrCodeImagesError.message}</SharedP>}
+                            {qrCodeImages && qrCodeImages[index] && (
+                                <img src={qrCodeImages[index]} alt="Kod QR" className="my-2" />
+                            )}
+
+                            {qrCodeImages && qrCodeImages[index] && (
+                                <HorizontalButtonContainer>
+                                    <GreenButton>
+                                    <a href={qrCodeImages[index]}
+                                        download={`QRCode_${qrCode.qrCode}.png`}>
+                                        Pobierz kod QR
                                         </a>
-                                        )}
-                                        <button className="bg-a_yellow text-white py-1 px-2 rounded-lg mt-2" 
-                                        onClick={() => navigate(`/edit-qr-code/${eventId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</button>
-                                        <button className="bg-red-500 text-white py-1 px-2 rounded-lg mt-2" onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</button>
-                                    </div>
-                                ))}
-                                
-                            </div>
-                            {(!qrCodes || qrCodes.length === 0) && <p>Brak kodów QR dla tej gry terenowej.</p>}
+                                    </GreenButton>
+                                    <YellowButton onClick={() => navigate(`/edit-qr-code/${eventId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</YellowButton>
+                                    <RedButton onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</RedButton>
+                                </HorizontalButtonContainer>
+                            )}
                         </div>
+                    ))}
+                    {(!qrCodes || qrCodes.length === 0) && <SharedP>Brak kodów QR dla tej gry terenowej.</SharedP>}
                     </div>
-                    <button className="w-1/4 mt-5 bg-p_green py-1 rounded text-white hover:text-s_brown" onClick={() => navigate(`/new-qr-code/${eventId}/${fieldGameId}`)}>Dodaj kod QR</button>
-                    <button className="w-1/4 mt-5 bg-s_brown py-1 rounded text-white" onClick={() => navigate(`/event/${eventId}`)}>Wróć do panelu wydarzenia</button>
-                </div>
-            </main>
-        </>
+                </WhiteBox>
+                <WhiteBox>
+                    <ButtonContainer>
+                        <GreenButton onClick={() => navigate(`/new-qr-code/${eventId}/${fieldGameId}`)}>Dodaj kod QR</GreenButton>
+                    </ButtonContainer>
+                </WhiteBox>
+                <ReturnButton to={`/event/${eventId}`}>Wróć do gier terenowych</ReturnButton>
+            </WhiteBoxColumn>
+        </MainBox>
     );
 };
 
-// TODO:  zrobić stronę dodawania kodu QR, zrobić stronę edycji kodu QR, refactoring
-// Zabezpieczyć endpointy w backendzie;
 export default QR_Codes;

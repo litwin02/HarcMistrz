@@ -13,6 +13,7 @@ import { BoldText } from "../shared/bold-text";
 import { GreenButton } from "../shared/shared-green-button";
 import { YellowButton } from "../shared/yellow_button";
 import { Message } from "../shared/message";
+import { ButtonContainer } from "../shared/button-container";
 
 const Dashboard = () => {
     const id = localStorage.getItem('id');
@@ -43,10 +44,6 @@ const Dashboard = () => {
             fetchData();
         }
     }, [role]);
-
-    const navigateToTeamManagement = () => {
-        navigate(`/team/${team?.id}`);
-    }
 
     const navigateToEventManagement = (id: string) => {
         navigate(`/event/${id}`);
@@ -109,7 +106,10 @@ const Dashboard = () => {
                         <SharedH2><BoldText>Twoja drużyna</BoldText> </SharedH2>
                         <SharedP><BoldText>Zespół:</BoldText> {team.name}</SharedP>
                         <SharedP><BoldText>Kod zespołu:</BoldText> {team.joinCode}</SharedP>
-                        <GreenButton onClick={() => navigate('/create-new-event')}>Dodaj nowe wydarzenie</GreenButton>
+                        <ButtonContainer>
+                            <GreenButton onClick={() => navigate('/create-new-event')}>Dodaj nowe wydarzenie</GreenButton>
+                            <YellowButton onClick={() => navigate(`/manage-team/${team.id}`)}>Zarządzaj drużyną</YellowButton>
+                        </ButtonContainer>
                     </WhiteBox>
                 }
                 {events?.map((event) => (

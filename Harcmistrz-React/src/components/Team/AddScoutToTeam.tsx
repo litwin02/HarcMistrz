@@ -69,7 +69,6 @@ const AddScoutToTeam = () => {
 
     return (
     <>
-        <Header />
         <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
             <h2 className='text-3xl mb-5'>Dołącz do zespołu</h2>
             <form onSubmit={getTeamByJoinCode}>

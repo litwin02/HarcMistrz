@@ -9,6 +9,15 @@ import 'dayjs/locale/pl';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { MainBox } from "../shared/main-box";
+import { WhiteBox } from "../shared/white-box";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { MainPageHeader } from "../shared/main-page-header";
+import { FormDiv } from "../shared/form-div";
+import { FormLabel } from "../shared/form-label";
+import { GreenButton } from "../shared/shared-green-button";
+import { ButtonContainer } from "../shared/button-container";
+import { ReturnButton } from "../shared/shared-return-button";
 
 
 const NewEvent = () => {
@@ -108,58 +117,62 @@ const NewEvent = () => {
 
 
     return(
-        <>
-        <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
-            <h2 className='text-3xl mb-5'>Utwórz nowe wydarzenie dla zespołu</h2>
+        <MainBox>
+            <WhiteBoxColumn>
+                <MainPageHeader>Utwórz nowe wydarzenie</MainPageHeader>
+            <WhiteBox>
             <form onSubmit={createNewEvent}>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Nazwij to wydarzenie</label>
+                <FormDiv>
+                    <FormLabel>Nazwa wydarzenia</FormLabel>
                     <input
-                        className='text-black'
+                        className="mt-1 p-2 rounded-md w-full border"
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
-                </div>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Dodaj opis tego wydarzenia</label>
+                </FormDiv>
+                <FormDiv>
+                    <FormLabel>Opis</FormLabel>
                     <input
-                        className='text-black'
+                        className="mt-1 p-2 rounded-md w-full border"
                         type="text"
                         value={description}
                         onChange={(e) => setDescrpition(e.target.value)}
                         required
                     />
-                </div>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Podaj miejsce tego wydarzenia</label>
+                </FormDiv>
+                <FormDiv>
+                    <FormLabel>Lokalizacja</FormLabel>
                     <input
-                        className='text-black'
+                        className="mt-1 p-2 rounded-md w-full border"
                         type="text"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                         required
                     />
-                </div>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Dodaj datę tego wydarzenia</label>
+                </FormDiv>
+                <FormDiv>
+                    <FormLabel>Data wydarzenia</FormLabel>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
                         <DateTimePicker
                             label="Wybierz datę"
                             value={date}
                             onChange={(handleDateChange)}
+                            sx={{ marginTop: '10px', padding: '0', width: '100%' }}
                         />
                     </LocalizationProvider>
-                </div>
-                {error && <p className='mb-8 text-red-800 text-2xl'>{error}</p>}
-                {message && <p className='mb-8 text-green-800 text-2xl'>{message.message}</p>}
-                <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Stwórz nowe wydarzenie</button>
-                
+                </FormDiv>
+                {error && <p className='mb-4 text-red-800 text-2xl'>{error}</p>}
+                {message && <p className='mb-4 text-green-800 text-2xl'>{message.message}</p>}
+                <ButtonContainer>
+                    <GreenButton type="submit">Stwórz nowe wydarzenie</GreenButton>
+                </ButtonContainer>
             </form>
-            <button className="bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown" type="submit" onClick={returnToDashboard}>Wróć do panelu głównego</button>
-        </div>
-        </>
+            </WhiteBox>
+            <ReturnButton to="/dashboard">Wróć do panelu głównego</ReturnButton>
+            </WhiteBoxColumn>
+        </MainBox>
     );
 }
 

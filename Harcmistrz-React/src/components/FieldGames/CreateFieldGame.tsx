@@ -3,6 +3,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../ApiContext";
 import { MessageResponse } from "../Models/MessageResponse";
+import { FormDiv } from "../shared/form-div";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { MainPageHeader } from "../shared/main-page-header";
+import { MainBox } from "../shared/main-box";
+import { FormLabel } from "../shared/form-label";
+import { WhiteBox } from "../shared/white-box";
+import { GreenButton } from "../shared/shared-green-button";
+import { ButtonContainer } from "../shared/button-container";
+import { ReturnButton } from "../shared/shared-return-button";
 
 const NewFieldGame = () => {
     const userToken = localStorage.getItem('token');
@@ -18,7 +27,7 @@ const NewFieldGame = () => {
 
     const addNewFieldGame = async (event: React.FormEvent) => {
         event.preventDefault();
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/fieldGames/createNewFieldGame`, {
                 method: 'POST',
                 headers: {
@@ -31,51 +40,56 @@ const NewFieldGame = () => {
                     eventId: eventId
                 })
             });
-            if(response.status === 400){
+            if (response.status === 400) {
                 setError("Wystąpił błąd podczas tworzenia gry terenowej.");
             }
-            if(response.status === 201 || response.status === 200){
+            if (response.status === 201 || response.status === 200) {
                 setMessage(await response.json());
             }
         }
-        catch(e: any){
+        catch (e: any) {
             throw e;
         }
     };
 
 
     return (
-        <>
-        <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
-            <h2 className='text-3xl mb-5'>Utwórz nową grę terenową</h2>
-            <form onSubmit={addNewFieldGame}>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Nazwa</label>
-                    <input
-                        className='text-black'
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Opis</label>
-                    <input
-                        className='text-black'
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescrpition(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p className='mb-8 text-red-800 text-2xl'>{error}</p>}
-                {message && <p className='mb-8 text-green-800 text-2xl'>{message.message}</p>}
-                <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Stwórz nowe wydarzenie</button>
-            </form>
-            <button className="bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown" type="submit" onClick={() => navigate('/dashboard')}>Wróć do panelu głównego</button>
-        </div>
-        </>
+        <MainBox>
+            <WhiteBoxColumn>
+                <MainPageHeader>Stwórz nową grę terenową</MainPageHeader>
+                <WhiteBox>
+
+                    <form onSubmit={addNewFieldGame}>
+                        <FormDiv>
+                            <FormLabel>Nazwa gry terenowej</FormLabel>
+                            <input
+                                className="mt-1 p-2 rounded-md w-full border"
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </FormDiv>
+                        <FormDiv>
+                            <FormLabel>Opis</FormLabel>
+                            <input
+                                className="mt-1 p-2 rounded-md w-full border"
+                                type="text"
+                                value={description}
+                                onChange={(e) => setDescrpition(e.target.value)}
+                                required
+                            />
+                        </FormDiv>
+                        {error && <p className='mb-4 text-red-800 text-2xl'>{error}</p>}
+                        {message && <p className='mb-4 text-green-800 text-2xl'>{message.message}</p>}
+                        <ButtonContainer>
+                            <GreenButton type="submit">Stwórz nową grę terenową</GreenButton>
+                        </ButtonContainer>
+                    </form>
+                </WhiteBox>
+                <ReturnButton to={`/event/${eventId}`}>Wróć do zarządzania wydarzeniem</ReturnButton>
+            </WhiteBoxColumn>
+        </MainBox>
     );
 };
 

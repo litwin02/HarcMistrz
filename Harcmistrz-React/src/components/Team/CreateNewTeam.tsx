@@ -48,7 +48,6 @@ const NewTeam = () => {
     };
 
     return(<>
-        <Header />
         <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
             <h2 className='text-3xl mb-5'>Utwórz nowy zespół</h2>
             <form onSubmit={createNewTeam}>

@@ -10,6 +10,8 @@ import umg.harcmistrz.requests.AddScoutToTeamRequest;
 import umg.harcmistrz.requests.CreateTeamRequest;
 import umg.harcmistrz.service.TeamService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/teams")
 public class TeamController {
@@ -38,7 +40,7 @@ public class TeamController {
         }
         boolean wasAttemptSuccessful = teamService.addScoutToTeam(addScoutToTeamRequest.getScoutId(), team);
         String message = wasAttemptSuccessful ? "Dołączyłeś do drużyny!" : "Jesteś już w tej drużynie lub należysz do innej drużyny!";
-        return ResponseEntity.ok(new MessageResponse(message));
+        return ResponseEntity.ok(new MessageResponse(message, wasAttemptSuccessful));
     }
 
     @GetMapping("/getTeamByTeamLeaderId/{teamLeaderId}")
@@ -53,6 +55,28 @@ public class TeamController {
         return getTeamResponseResponseEntity(team);
     }
 
+    @GetMapping("/getTeamMembers/{teamId}")
+    public ResponseEntity<List<TeamMemberDTO>> getTeamMembers(@PathVariable Long teamId) {
+        return ResponseEntity.ok(teamService.getTeamMembers(teamId));
+    }
+
+    @DeleteMapping("/remove/{scoutId}/from/{teamId}")
+    public ResponseEntity<MessageResponse> removeScoutFromTeam(@PathVariable Long scoutId, @PathVariable Long teamId) {
+        String message = teamService.removeScoutFromTeam(scoutId, teamId);
+        return ResponseEntity.ok(new MessageResponse(message, true));
+    }
+
+    @PutMapping("/updateTeamName/{teamId}")
+    public ResponseEntity<MessageResponse> updateTeamName(@PathVariable Long teamId, @RequestBody String teamName) {
+        String message = teamService.updateTeamName(teamId, teamName);
+        return ResponseEntity.ok(new MessageResponse(message, true));
+    }
+
+    @DeleteMapping("/deleteTeam/{teamId}")
+    public ResponseEntity<MessageResponse> deleteTeam(@PathVariable Long teamId) {
+        String message = teamService.deleteTeam(teamId);
+        return ResponseEntity.ok(new MessageResponse(message, true));
+    }
 
     // PRIVATE METHODS
     private ResponseEntity<TeamDTO> getTeamResponseResponseEntity(Team team) {

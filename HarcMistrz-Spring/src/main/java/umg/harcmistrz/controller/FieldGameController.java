@@ -25,7 +25,7 @@ public class FieldGameController {
     @PostMapping("/createNewFieldGame")
     public ResponseEntity<MessageResponse> createNewFieldGame(@RequestBody NewFieldGameRequest newFieldGameRequest) {
         fieldGameService.createNewFieldGame(newFieldGameRequest);
-        return ResponseEntity.ok(new MessageResponse("Utworzono nową grę terenową!"));
+        return ResponseEntity.ok(new MessageResponse("Utworzono nową grę terenową!", true));
     }
 
     @GetMapping("/getFieldGameById/{id}")
@@ -75,12 +75,12 @@ public class FieldGameController {
     @PutMapping("/updateFieldGame")
     public ResponseEntity<MessageResponse> updateFieldGame(@RequestBody EditFieldGameRequest request) {
         fieldGameService.updateFieldGame(request);
-        return ResponseEntity.ok(new MessageResponse("Zaktualizowano grę terenową!"));
+        return ResponseEntity.ok(new MessageResponse("Zaktualizowano grę terenową!", true));
     }
 
     @DeleteMapping("/deleteFieldGame/{id}")
     public ResponseEntity<MessageResponse> deleteFieldGame(@PathVariable Long id) {
         fieldGameService.deleteFieldGame(id);
-        return ResponseEntity.ok(new MessageResponse("Usunięto grę terenową!"));
+        return ResponseEntity.ok(new MessageResponse("Usunięto grę terenową!", true));
     }
 }

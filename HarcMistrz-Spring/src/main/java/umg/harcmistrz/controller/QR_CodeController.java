@@ -55,7 +55,7 @@ public class QR_CodeController {
     public ResponseEntity<MessageResponse> deleteQRCode(@PathVariable UUID qrCode) {
         try {
             qr_codeService.deleteQRCode(qrCode);
-            return ResponseEntity.ok(new MessageResponse("Usunięto kod QR!"));
+            return ResponseEntity.ok(new MessageResponse("Usunięto kod QR!", true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -66,7 +66,7 @@ public class QR_CodeController {
     public ResponseEntity<MessageResponse> modifyQRCode(@RequestBody UpdateQR_CodeRequest qrCodeRequest) {
         try {
             qr_codeService.modifyQRCode(qrCodeRequest);
-            return ResponseEntity.ok(new MessageResponse("Zmodyfikowano kod QR!"));
+            return ResponseEntity.ok(new MessageResponse("Zmodyfikowano kod QR!", true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

@@ -21,6 +21,8 @@ import EditFieldGame from './components/FieldGames/EditFieldGame';
 import UserDashboard from './components/Pages/UserDashboard';
 import Layout from './Layout';
 import AvaliableEvents from './components/Events/AvaliableEvents';
+import ManageTeam from './components/Team/ManageTeam';
+import EditTeam from './components/Team/EditTeam';
 
 function App() {
   const router = createBrowserRouter([
@@ -175,7 +177,27 @@ function App() {
           </Layout>
         </ProtectedRoute>
       )
-    }
+    },
+    {
+      path: '/manage-team/:teamId',
+      element: (
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
+          <Layout>
+            <ManageTeam />
+          </Layout>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/edit-team',
+      element: (
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
+          <Layout>
+            <EditTeam />
+          </Layout>
+        </ProtectedRoute>
+      )
+    },
 
   ]);
 
