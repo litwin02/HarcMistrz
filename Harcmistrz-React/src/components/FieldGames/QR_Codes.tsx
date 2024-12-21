@@ -5,7 +5,6 @@ import { FieldGameDTO } from "../Models/FieldGameDTO";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { QR_CodeDTO } from "../Models/QR_CodeDTO";
-import MainPage from "../Pages/MainPage";
 import { WhiteBoxColumn } from "../shared/white-box-column";
 import { MainPageHeader } from "../shared/main-page-header";
 import { BoldText } from "../shared/bold-text";
@@ -153,14 +152,14 @@ const QR_Codes = () => {
                                         Pobierz kod QR
                                         </a>
                                     </GreenButton>
-                                    <YellowButton onClick={() => navigate(`/edit-qr-code/${eventId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</YellowButton>
+                                    <YellowButton onClick={() => navigate(`/edit-qr-code/${eventId}/${fieldGameId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</YellowButton>
                                     <RedButton onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</RedButton>
                                 </HorizontalButtonContainer>
                             )}
                         </div>
                     ))}
-                    {(!qrCodes || qrCodes.length === 0) && <SharedP>Brak kodów QR dla tej gry terenowej.</SharedP>}
                     </div>
+                    {(!qrCodes || qrCodes.length === 0) && <SharedP>Brak kodów QR dla tej gry terenowej.</SharedP>}
                 </WhiteBox>
                 <WhiteBox>
                     <ButtonContainer>

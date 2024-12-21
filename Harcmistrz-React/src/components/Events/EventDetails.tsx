@@ -4,6 +4,15 @@ import { Event } from "../Models/EventModel";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FieldGameDTO } from "../Models/FieldGameDTO";
+import { MainBox } from "../shared/main-box";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { MainPageHeader } from "../shared/main-page-header";
+import { BoldText } from "../shared/bold-text";
+import { WhiteBox } from "../shared/white-box";
+import { SharedH2 } from "../shared/shared-h2";
+import { SharedP } from "../shared/shared-p";
+import { ReturnButton } from "../shared/shared-return-button";
+import { GreenButton } from "../shared/shared-green-button";
 
 const EventDetails = () => {
     const API_BASE_URL = useApi();
@@ -61,43 +70,37 @@ const EventDetails = () => {
             getFieldGameByEventId(parseInt(eventId)).then(fetchedFieldGame => setFieldGame(fetchedFieldGame));
         }
     }, [eventId]);
-    
+
 
     return (
-        <>
-            <main className="bg-a_yellow">
-                <div className="container mx-auto py-10">
-                    <h1 className="text-3xl text-center">Szczegóły wydarzenia</h1>
-                    <div className="flex flex-col justify-center items-center mt-5">
-                        <div className="w-1/2 bg-white p-5 rounded-lg">
-                            <div className="flex justify-left mt-5">
-                                {event && (
-                                    <div>
-                                        <h2 className="text-2xl font-bold">{event.name}</h2>
-                                        <p className="text-lg">{event.description}</p>
-                                        <p className="text-lg">Data: {event.date}</p>
-                                        <p className="text-lg">Lokalizacja: {event.location}</p>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="flex justify-left mt-5">
-                                {fieldGame && (
-                                    <div>
-                                        <h2 className="text-2xl font-bold">Gra terenowa:</h2>
-                                        <p className="text-lg">Nazwa: {fieldGame.name}</p>
-                                        <p className="text-lg">Opis: {fieldGame.description}</p>
-                                        <p className="text-lg">Czy jest aktywowana: {fieldGame.isActivated}</p>
-                                        {fieldGame.isActivated && (
-                                            <button className="bg-p_green text-white p-2 rounded-lg mt-5">Rozpocznij grę!</button>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+        <MainBox>
+            <WhiteBoxColumn>
+                <MainPageHeader>Szczegóły wydarzenia: <BoldText>{event?.name}</BoldText></MainPageHeader>
+                <WhiteBox>
+                    {event && (
+                        <div>
+                            <SharedP>Opis: <BoldText>{event.description}</BoldText></SharedP>
+                            <SharedP>Data: <BoldText>{event.date}</BoldText></SharedP>
+                            <SharedP>Lokalizacja: <BoldText>{event.location}</BoldText></SharedP>
                         </div>
-                    </div>
-                </div>
-            </main>
-        </>
+                    )}
+                </WhiteBox>
+                <WhiteBox>
+                    {fieldGame && (
+                        <div>
+                            <SharedH2>Gra terenowa:</SharedH2>
+                            <SharedP>Nazwa: <BoldText>{fieldGame.name}</BoldText></SharedP>
+                            <SharedP>Opis: <BoldText>{fieldGame.description}</BoldText></SharedP>
+                            <SharedP>Czy jest aktywowana: {fieldGame.isActivated ? "Tak" : "Nie"}</SharedP>
+                            {fieldGame.isActivated && (
+                               <GreenButton>Przejdź do gry</GreenButton>
+                            )}
+                        </div>
+                    )}
+                </WhiteBox>
+                <ReturnButton to="/user-dashboard">Wróć na stronę główną</ReturnButton>
+            </WhiteBoxColumn>
+        </MainBox>
     );
 };
 

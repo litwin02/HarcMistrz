@@ -23,6 +23,7 @@ import Layout from './Layout';
 import AvaliableEvents from './components/Events/AvaliableEvents';
 import ManageTeam from './components/Team/ManageTeam';
 import EditTeam from './components/Team/EditTeam';
+import EventDetails from './components/Events/EventDetails';
 
 function App() {
   const router = createBrowserRouter([
@@ -139,7 +140,7 @@ function App() {
       )
     },
     {
-      path: '/edit-qr-code/:eventId/:qrCodeId',
+      path: '/edit-qr-code/:eventId/:fieldGameId/:qrCodeId',
       element: (
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <Layout>
@@ -194,6 +195,16 @@ function App() {
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <Layout>
             <EditTeam />
+          </Layout>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/event-details/:eventId',
+      element: (
+        <ProtectedRoute allowedRoles={["SCOUT"]}>
+          <Layout>
+            <EventDetails />
           </Layout>
         </ProtectedRoute>
       )

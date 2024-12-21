@@ -121,8 +121,13 @@ const Dashboard = () => {
                         <YellowButton onClick={() => navigateToEventManagement(event.id)}>Zarządzaj wydarzeniem</YellowButton>
                     </WhiteBox>
                 ))}
-                {!team && <GreenButton onClick={() => navigate('/create-new-team')}>Stwórz nową drużynę</GreenButton>}
-                {error && <Message>{error}</Message>}
+                {(error || !team) && (
+                    <WhiteBox>
+                        {error && <Message>{error}</Message>}
+                        {!team && <ButtonContainer><GreenButton onClick={() => navigate('/create-new-team')}>Stwórz nową drużynę</GreenButton></ButtonContainer>}
+                    </WhiteBox>
+                )}
+
             </WhiteBoxColumn>
         </MainBox>
 

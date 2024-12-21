@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.dto.QR_CodeDTO;
 import umg.harcmistrz.requests.NewQR_CodeRequest;
+import umg.harcmistrz.requests.ScanQR_CodeRequest;
 import umg.harcmistrz.requests.UpdateQR_CodeRequest;
 import umg.harcmistrz.service.QR_CodeService;
 
@@ -61,7 +62,6 @@ public class QR_CodeController {
         }
     }
 
-    // przetestować ten endpoint
     @PutMapping("/modifyQRCode")
     public ResponseEntity<MessageResponse> modifyQRCode(@RequestBody UpdateQR_CodeRequest qrCodeRequest) {
         try {
@@ -77,6 +77,16 @@ public class QR_CodeController {
         try {
             byte[] qrCode = qr_codeService.saveQRCode(newQR_CodeRequest);
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE).body(qrCode);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/scanQRCode")
+    public ResponseEntity<MessageResponse> scanQRCode(@RequestBody ScanQR_CodeRequest qrCode) {
+        try {
+            qr_codeService.scanQRCode(qrCode);
+            return ResponseEntity.ok(new MessageResponse("Zeskanowano kod QR!", true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

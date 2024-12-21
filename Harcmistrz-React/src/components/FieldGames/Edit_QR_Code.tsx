@@ -3,16 +3,25 @@ import { useApi } from "../../ApiContext";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { QR_CodeDTO } from "../Models/QR_CodeDTO";
+import { MainBox } from "../shared/main-box";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { MainPageHeader } from "../shared/main-page-header";
+import { WhiteBox } from "../shared/white-box";
+import { FormDiv } from "../shared/form-div";
+import { FormLabel } from "../shared/form-label";
+import { ButtonContainer } from "../shared/button-container";
+import { GreenButton } from "../shared/shared-green-button";
+import { ReturnButton } from "../shared/shared-return-button";
 
 const Edit_QR_Code = () => {
-    const navigate = useNavigate();
     const API_BASE_URL = useApi();
     const { qrCodeId } = useParams<{ qrCodeId: string }>();
     const { eventId } = useParams<{ eventId: string }>();
+    const { fieldGameId } = useParams<{ fieldGameId: string }>();
     const [message, setMessage] = useState<string | null>(null);
 
     const getQRCodeInfoById = async (id: string): Promise<any> => {
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/qr_codes/getQRCodeInfoById/${id}`, {
                 method: 'GET',
                 headers: {
@@ -67,35 +76,37 @@ const Edit_QR_Code = () => {
     const [points, setPoints] = useState<number>(0);
 
     return (
-        <>
-            <main className="bg-a_yellow">
-                <div className="container mx-auto py-10 flex flex-col justify-center items-center">
-                    <h1 className="text-3xl text-white">Edytuj kod QR</h1>
-                    <div className="w-1/2 bg-white p-5 rounded-lg mt-5">
-                        <form>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Opis kodu QR</label>
-                                <textarea className="mt-1 p-2 rounded-md w-full border" 
+        <MainBox>
+            <WhiteBoxColumn>
+                <MainPageHeader>Edytuj informacje kodu QR</MainPageHeader>
+                <WhiteBox>
+                    <form onSubmit={updateQRCode}>
+                        <FormDiv>
+                            <FormLabel>Opis kodu QR</FormLabel>
+                            <textarea className="mt-1 p-2 rounded-md w-full border"
                                 value={description}
-                                onChange={(e) => setDescription(e.target.value)}required></textarea>
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Punkty, które można uzyskać za zeskanowanie kodu</label>
-                                <input type="number" className="mt-1 p-2 rounded-md w-full border" 
+                                onChange={(e) => setDescription(e.target.value)} required></textarea>
+                        </FormDiv>
+                        <FormDiv>
+                            <FormLabel>Punkty, które można uzyskać za zeskanowanie kodu</FormLabel>
+                            <input type="number" className="mt-1 p-2 rounded-md w-full border"
                                 value={points}
-                                onChange={(e) => setPoints(e.target.valueAsNumber)}/>
-                            </div>
-                            <button className="bg-p_green text-white p-2 rounded-md w-full" onClick={updateQRCode}>Edytuj kod QR</button>
-                        </form>
-                        {message && <p className="mt-2 text-2xl text-center">{message}</p>}
-                    </div>
-                    
-                    <button className="w-1/4 mt-5 bg-s_brown py-1 rounded text-white" onClick={() => navigate(`/event/${eventId}`)}>Wróć do panelu wydarzenia</button>
-                </div>
-            </main>
-        </>
+                                required
+                                min={1}
+                                onChange={(e) => setPoints(e.target.valueAsNumber)} />
+                        </FormDiv>
+
+                        <ButtonContainer>
+                            <GreenButton type="submit">Edytuj kod QR</GreenButton>
+                        </ButtonContainer>
+                    </form>
+                    {message && <p className="mt-2 text-2xl text-center">{message}</p>}
+                </WhiteBox>
+                <ReturnButton to={`/qr-codes/${eventId}/${fieldGameId}`}>Wróć do listy kodów QR</ReturnButton>
+            </WhiteBoxColumn>
+        </MainBox>
     );
-    
+
 };
 
 export default Edit_QR_Code;

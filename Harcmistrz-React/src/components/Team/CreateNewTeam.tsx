@@ -1,13 +1,22 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Header from "../Partials/Header";
 import { useApi } from "../../ApiContext";
+import { MainBox } from "../shared/main-box";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { WhiteBox } from "../shared/white-box";
+import { MainPageHeader } from "../shared/main-page-header";
+import { FormDiv } from "../shared/form-div";
+import { FormLabel } from "../shared/form-label";
+import { SharedP } from "../shared/shared-p";
+import { Message } from "../shared/message";
+import { GreenButton } from "../shared/shared-green-button";
+import { ReturnButton } from "../shared/shared-return-button";
+import { SharedH2 } from "../shared/shared-h2";
+import { BoldText } from "../shared/bold-text";
 
 const NewTeam = () => {
     const teamLeaderId = Number(localStorage.getItem('id'));
     const userToken = localStorage.getItem('token');
     const API_BASE_URL = useApi();
-    const navigate = useNavigate();
 
     const [error, setError] = useState<string | null>(null);
     const [teamName, setTeamName] = useState<string>('');
@@ -17,59 +26,59 @@ const NewTeam = () => {
         e.preventDefault();
         setError(null);
 
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/teams/createNewTeam`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userToken}` 
+                    'Authorization': `Bearer ${userToken}`
                 },
                 body: JSON.stringify({ teamLeaderId, teamName })
             });
 
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error("Nie udało się stworzyć nowej drużyny!");
             }
             const responseData: string = await response.text();
-            if(responseData.length < 5 || responseData == null){
+            if (responseData.length < 5 || responseData == null) {
                 throw new Error("Nie udało się poprawnie stworzyć nowej drużyny!");
             }
 
             setJoinCode(responseData);
-            
+
         }
-        catch(e: any){
+        catch (e: any) {
             setError(e.message);
         }
     };
 
-    const returnToDashboard = () => {
-        navigate("/dashboard");
-    };
-
-    return(<>
-        <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
-            <h2 className='text-3xl mb-5'>Utwórz nowy zespół</h2>
-            <form onSubmit={createNewTeam}>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Nazwij swój zespół</label>
-                    <input
-                        className='text-black'
-                        type="text"
-                        value={teamName}
-                        onChange={(e) => setTeamName(e.target.value)}
-                        required
-                    />
-                </div>
-                <h3 className="mb-5">Stworzymy unikalny kod dla Twojego zespołu. 
-                    Inni członkowie zespołu będą go mogli podać, aby dołączyć do twojej drużyny</h3>
-                {error && <p className='mb-8 text-red-800 text-2xl'>{error}</p>}
-                {!joinCode && <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Stwórz nowy zespół</button> }
-                {joinCode && <p className="mb-8 text-2xl">Twój kod zespołu: {joinCode}</p>}
-            </form>
-            {joinCode && <button className="bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown" type="submit" onClick={returnToDashboard}>Wróć do panelu głównego</button>}
-        </div>
-    </>)
+    return (
+        <MainBox>
+            <WhiteBoxColumn>
+                <MainPageHeader>Stwórz nowy zespół</MainPageHeader>
+                <WhiteBox>
+                    <form onSubmit={createNewTeam}>
+                        <FormDiv>
+                            <FormLabel>Nazwij swój zespół</FormLabel>
+                            <input
+                                className="mt-1 p-2 rounded-md w-full border"
+                                type="text"
+                                value={teamName}
+                                onChange={(e) => setTeamName(e.target.value)}
+                                required
+                            />
+                        </FormDiv>
+                        <SharedP>Stworzymy unikalny kod dla Twojego zespołu.
+                            Inni członkowie zespołu będą go mogli podać, aby dołączyć do twojej drużyny.</SharedP>
+                        {error && <Message>{error}</Message>}
+                        {!joinCode && <GreenButton type="submit">Stwórz nowy zespół</GreenButton>}
+                        {joinCode && <SharedH2>Twój kod zespołu: <BoldText>{joinCode}</BoldText></SharedH2>}
+                    </form>
+                </WhiteBox>
+                {joinCode && <ReturnButton to="/dashboard">Wróć do panelu głównego</ReturnButton>}
+            </WhiteBoxColumn>
+        </MainBox>
+    );
 };
 
 export default NewTeam;

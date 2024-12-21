@@ -17,6 +17,8 @@ import { SharedP } from "../shared/shared-p";
 import { BoldText } from "../shared/bold-text";
 import { GreenButton } from "../shared/shared-green-button";
 import { RedButton } from "../shared/red-button";
+import { YellowButton } from "../shared/yellow_button";
+import { HorizontalButtonContainer } from "../shared/horizontal-button-container";
 
 const UserDashboard = () => {
     const API_BASE_URL = useApi();
@@ -160,21 +162,20 @@ const UserDashboard = () => {
                                     <SharedP><BoldText>Opis: </BoldText>{event.description}</SharedP>
                                     <SharedP><BoldText>Lokalizacja: </BoldText>{event.location}</SharedP>
                                     <SharedP><BoldText>Data wydarzenia: </BoldText>{event.date}</SharedP>
-                                    <RedButton onClick={() => {
-                                        const eventToParticipate = eventsToParticipate?.find(e => e.eventId === event.id);
-                                        if (eventToParticipate) {
-                                            handleUnsubscribe(eventToParticipate.id);
-                                        }
-                                    }}>Wypisz się z wydarzenia</RedButton>
+                                    <HorizontalButtonContainer>
+                                        <YellowButton onClick={() => navigate(`/event-details/${event.id}`)}>Szczegóły wydarzenia</YellowButton>
+                                        <RedButton onClick={() => {
+                                            const eventToParticipate = eventsToParticipate?.find(e => e.eventId === event.id);
+                                            if (eventToParticipate) {
+                                                handleUnsubscribe(eventToParticipate.id);
+                                            }
+                                        }}>Wypisz się z wydarzenia</RedButton>
+                                    </HorizontalButtonContainer>
                                 </div>
                             ))}
                         </div>
                     }
-
-                    <div className="mt-5">
-                        <GreenButton onClick={() => navigate(`/available-events/${team?.id}`)}>Przeglądaj wydarzenia</GreenButton>
-                    </div>
-
+                    <GreenButton onClick={() => navigate(`/available-events/${team?.id}`)}>Przeglądaj wydarzenia</GreenButton>
                 </WhiteBox>
             </WhiteBoxColumn>
         </MainBox>

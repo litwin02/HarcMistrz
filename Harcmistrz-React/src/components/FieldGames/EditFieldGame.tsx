@@ -4,11 +4,19 @@ import { useState } from 'react';
 import { MessageResponse } from '../Models/MessageResponse';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { MainBox } from '../shared/main-box';
+import { WhiteBoxColumn } from '../shared/white-box-column';
+import { MainPageHeader } from '../shared/main-page-header';
+import { WhiteBox } from '../shared/white-box';
+import { FormDiv } from '../shared/form-div';
+import { FormLabel } from '../shared/form-label';
+import { Message } from '../shared/message';
+import { YellowButton } from '../shared/yellow_button';
+import { ReturnButton } from '../shared/shared-return-button';
 
 
 const EditFieldGame = () => {
     const API_BASE_URL = useApi();
-    const navigate = useNavigate();
 
     const { eventId } = useParams<{ eventId: string }>();
     const { fieldGameId } = useParams<{ fieldGameId: string }>();
@@ -20,7 +28,7 @@ const EditFieldGame = () => {
     const [error, setError] = useState<string | null>(null);
 
     const getFieldGame = async (id: string): Promise<any> => {
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/fieldGames/getFieldGameById/${id}`, {
                 method: 'GET',
                 headers: {
@@ -36,7 +44,7 @@ const EditFieldGame = () => {
             setDescrpition(responseJson.description);
             return responseJson;
         }
-        catch(e: any){
+        catch (e: any) {
             throw e;
         }
     };
@@ -49,7 +57,7 @@ const EditFieldGame = () => {
 
     const editFieldGame = async (event: React.FormEvent) => {
         event.preventDefault();
-        try{
+        try {
             const response = await fetch(`${API_BASE_URL}/fieldGames/updateFieldGame`, {
                 method: 'PUT',
                 headers: {
@@ -62,48 +70,52 @@ const EditFieldGame = () => {
                     description: description
                 })
             });
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error("Wystąpił błąd podczas edycji gry terenowej.");
             }
             setMessage(await response.json());
         }
-        catch(e: any){
+        catch (e: any) {
             setError(e.message);
         }
     }
 
+    const returnString = `/event/${eventId}`;
+
     return (
-        <>
-        <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
-            <h2 className='text-3xl mb-5'>Edytuj grę terenową</h2>
-            <form onSubmit={editFieldGame}>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Nazwa</label>
-                    <input
-                        className='text-black'
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Opis</label>
-                    <input
-                        className='text-black'
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescrpition(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p className='mb-8 text-red-800 text-2xl'>{error}</p>}
-                {message && <p className='mb-8 text-green-800 text-2xl'>{message.message}</p>}
-                <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Edytuj wydarzenie</button>
-            </form>
-            <button className="bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown" type="submit" onClick={() => navigate(`/event/${eventId}`)}>Wróć do panelu głównego</button>
-        </div>
-        </>
+        <MainBox>
+            <WhiteBoxColumn>
+                <MainPageHeader>Edytuj grę terenową</MainPageHeader>
+                <WhiteBox>
+                    <form onSubmit={editFieldGame}>
+                        <FormDiv>
+                            <FormLabel>Nazwa</FormLabel>
+                            <input
+                                className="mt-1 p-2 rounded-md w-full border"
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </FormDiv>
+                        <FormDiv>
+                            <FormLabel>Opis</FormLabel>
+                            <input
+                                className="mt-1 p-2 rounded-md w-full border"
+                                type="text"
+                                value={description}
+                                onChange={(e) => setDescrpition(e.target.value)}
+                                required
+                            />
+                        </FormDiv>
+                        {error && <Message>{error}</Message>}
+                        {message && <Message>{message.message}</Message>}
+                        <YellowButton type="submit">Edytuj wydarzenie</YellowButton>
+                    </form>
+                </WhiteBox>
+                <ReturnButton to={returnString}>Wróć do panelu wydarzenia</ReturnButton>
+            </WhiteBoxColumn>
+        </MainBox>
     );
 };
 

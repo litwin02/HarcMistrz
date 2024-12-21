@@ -1,8 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Header from "../Partials/Header";
 import { MessageResponse } from "../Models/MessageResponse";
 import { BasicTeamResponse } from "../Models/BasicTeamResponse"
+import { MainBox } from "../shared/main-box";
+import { WhiteBoxColumn } from "../shared/white-box-column";
+import { MainPageHeader } from "../shared/main-page-header";
+import { WhiteBox } from "../shared/white-box";
+import { FormDiv } from "../shared/form-div";
+import { FormLabel } from "../shared/form-label";
+import { SharedP } from "../shared/shared-p";
+import { YellowButton } from "../shared/yellow_button";
+import { SharedH2 } from "../shared/shared-h2";
+import { BoldText } from "../shared/bold-text";
+import { ReturnButton } from "../shared/shared-return-button";
+import { GreenButton } from "../shared/shared-green-button";
+import { Message } from "../shared/message";
 
 const AddScoutToTeam = () => {
 
@@ -68,30 +80,34 @@ const AddScoutToTeam = () => {
     };
 
     return (
-    <>
-        <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
-            <h2 className='text-3xl mb-5'>Dołącz do zespołu</h2>
+    <MainBox>
+
+        <WhiteBoxColumn>
+            <MainPageHeader>Dołącz do drużyny</MainPageHeader>
+            <WhiteBox>
             <form onSubmit={getTeamByJoinCode}>
-                <div className='text-2xl mb-5'>
-                    <label className='mr-5'>Podaj kod zespołu</label>
+                <FormDiv>
+                    <FormLabel>Podaj kod zespołu</FormLabel>
                     <input
-                        className='text-black'
+                        className="mt-1 p-2 rounded-md w-full border" 
                         type="text"
                         value={joinCode}
                         onChange={(e) => setJoinCode(e.target.value)}
                         required
                     />
-                </div>
-                {error && <p className='mb-8 text-red-800 text-2xl'>{error}</p>}
-                <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Szukaj zespołu</button>
+                </FormDiv>
+                {error && <SharedP>{error}</SharedP>}
+                <YellowButton type="submit">Szukaj zespołu</YellowButton>
             </form>
-            {teamResponse && <h3 className='text-2xl mb-5'>Nazwa zepsołu: {teamResponse.name}</h3>}
-            {teamResponse && <h3 className='text-2xl mb-5'>Lider zespołu: {teamResponse.teamLeaderName}</h3>}
-            {teamResponse && <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit" onClick={joinTeam}>Dołącz do tego zespołu</button>}
-            {message && <h3 className='text-2xl mb-5'>{message.message}</h3>}
-            <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit" onClick={returnToDashboard}>Wróć na stronę główną</button>
-        </div>
-        </>
+            {teamResponse && <div className="mt-2"></div>}
+            {teamResponse && <SharedH2>Nazwa zepsołu: <BoldText>{teamResponse.name}</BoldText></SharedH2>}
+            {teamResponse && <SharedH2>Lider zespołu: <BoldText>{teamResponse.teamLeaderName}</BoldText></SharedH2>}
+            {teamResponse && <GreenButton onClick={joinTeam}>Dołącz do tego zespołu</GreenButton>}
+            {message && <Message>{message.message}</Message>}
+            </WhiteBox>
+            <ReturnButton to="/user-dashboard">Powrót do panelu użytkownika</ReturnButton>
+            </WhiteBoxColumn>
+        </MainBox>
     );
   
 };

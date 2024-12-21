@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.Event;
 import umg.harcmistrz.Models.EventParticipation;
+import umg.harcmistrz.Models.ScoutInTeam;
 import umg.harcmistrz.dto.EventParticipationDTO;
 import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.repository.EventParticipationRepository;
@@ -26,8 +27,11 @@ public class EventParticipationService {
     private EventRepository eventRepository;
 
     public List<EventParticipationDTO> getEventParticipationByScoutId(Long scoutId) {
-        List<EventParticipation> eventParticipation = eventParticipationRepository
-                .findByScoutInTeamId(scoutInTeamRepository.findByScoutId(scoutId).getFirst().getId());
+        List<ScoutInTeam> scoutInTeam = scoutInTeamRepository.findByScoutId(scoutId);
+        List<EventParticipation> eventParticipation = new ArrayList<>();
+        for (ScoutInTeam scout : scoutInTeam) {
+            eventParticipation.addAll(eventParticipationRepository.findByScoutInTeamId(scout.getId()));
+        }
         return getEventParticipationDTOS(eventParticipation);
     }
 

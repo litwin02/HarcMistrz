@@ -59,6 +59,8 @@ const New_QR_Code = () => {
                                 <FormLabel>Punkty, jakie można uzyskać za zeskanowanie kodu</FormLabel>
                                 <input type="number" className="mt-1 p-2 rounded-md w-full border" 
                                 value={points}
+                                required
+                                min={1}
                                 onChange={(e) => setPoints(e.target.valueAsNumber)}/>
                             </FormDiv>
                             <GreenButton type="submit">Generuj kod QR</GreenButton>
@@ -67,7 +69,7 @@ const New_QR_Code = () => {
                     {qrCodeUrl &&
                     <WhiteBox>
                         <SharedH2>Wygenerowany kod QR</SharedH2>
-                        {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" />}
+                        {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" className="w-1/4"/>}
                             <a href={qrCodeUrl} download="QRCode.png">
                                 <GreenButton>Pobierz kod QR</GreenButton>
                             </a>

@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Roles } from '../Models/Roles';
+import { MainBox } from '../shared/main-box';
+import { WhiteBoxColumn } from '../shared/white-box-column';
+import { MainPageHeader } from '../shared/main-page-header';
+import { WhiteBox } from '../shared/white-box';
+import { FormDiv } from '../shared/form-div';
+import { FormLabel } from '../shared/form-label';
+import { GreenButton } from '../shared/shared-green-button';
 
 interface LoginResponse {
   id?: number;
@@ -59,35 +66,37 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-    <div className='pt-10 bg-p_green text-white flex-col grid justify-center'>
-      <h2 className='text-3xl mb-5'>Zaloguj się</h2>
+    <MainBox>
+      <WhiteBoxColumn>
+      <MainPageHeader>Zaloguj się</MainPageHeader>
+      <WhiteBox>
       <form onSubmit={handleLogin}>
-        <div className='text-2xl mb-5'>
-          <label className='mr-5'>Email:</label>
+        <FormDiv>
+          <FormLabel>Email:</FormLabel>
           <input
-            className='text-black'
+            className="mt-1 p-2 rounded-md w-full border"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
-        <div className='text-2xl mb-8'>
-          <label className='mr-5'>Hasło:</label>
+        </FormDiv>
+        <FormDiv>
+          <FormLabel>Hasło:</FormLabel>
           <input
-            className='text-black'
+            className="mt-1 p-2 rounded-md w-full border"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
+        </FormDiv>
         {error && <p className='mb-8 text-red-800 text-2xl'>{error}</p>}
-        <button className='bg-a_yellow p-3 text-2xl mb-10 rounded hover:text-s_brown' type="submit">Zaloguj się</button>
+        <GreenButton type="submit">Zaloguj się</GreenButton>
       </form>
-    </div>
-    </>
+      </WhiteBox>
+      </WhiteBoxColumn>
+    </MainBox>
   );
 };
 

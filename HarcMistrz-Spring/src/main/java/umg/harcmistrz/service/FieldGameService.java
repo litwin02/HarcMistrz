@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.FieldGame;
 import umg.harcmistrz.dto.FieldGameDTO;
+import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.repository.FieldGameRepository;
 import umg.harcmistrz.repository.QR_CodeRepository;
 import umg.harcmistrz.requests.EditFieldGameRequest;
@@ -60,5 +61,15 @@ public class FieldGameService {
             fieldGame.setDescription(request.getDescription());
             fieldGameRepository.save(fieldGame);
         }
+    }
+
+    public MessageResponse activateFieldGame(Long id) {
+        FieldGame fieldGame = fieldGameRepository.findById(id).orElse(null);
+        if (fieldGame != null) {
+            fieldGame.setIsActivated(true);
+            fieldGameRepository.save(fieldGame);
+            return new MessageResponse("Aktywowano grę terenową!", true);
+        }
+        return new MessageResponse("Nie udało się aktywować gry terenowej!", false);
     }
 }
