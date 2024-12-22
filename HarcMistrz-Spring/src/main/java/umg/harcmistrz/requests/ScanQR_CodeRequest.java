@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,5 +15,4 @@ public class ScanQR_CodeRequest {
     private UUID qrCode;
     private Long fieldGameId;
     private Long scoutId;
-    private OffsetDateTime scanTime;
 }

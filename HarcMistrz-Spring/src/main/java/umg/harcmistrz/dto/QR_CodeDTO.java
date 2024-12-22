@@ -17,5 +17,7 @@ public class QR_CodeDTO {
     private UUID qrCode;
     private int points;
     private Boolean scanned;
+    private String firstName;
+    private String lastName;
     private String description;
 }

@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { useApi } from "../../ApiContext";
 import { Event } from "../Models/EventModel";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FieldGameDTO } from "../Models/FieldGameDTO";
 import { MainBox } from "../shared/main-box";
@@ -19,6 +19,7 @@ const EventDetails = () => {
     const { eventId } = useParams<{ eventId: string }>();
     const [event, setEvent] = useState<Event>();
     const [fieldGame, setFieldGame] = useState<FieldGameDTO>();
+    const navigate = useNavigate();
 
     const getEventById = async (eventId: number) => {
         try {
@@ -93,7 +94,7 @@ const EventDetails = () => {
                             <SharedP>Opis: <BoldText>{fieldGame.description}</BoldText></SharedP>
                             <SharedP>Czy jest aktywowana: {fieldGame.isActivated ? "Tak" : "Nie"}</SharedP>
                             {fieldGame.isActivated && (
-                               <GreenButton>Przejdź do gry</GreenButton>
+                               <GreenButton onClick={() => navigate(`/play-field-game/${eventId}/${fieldGame.id}`)}>Przejdź do gry</GreenButton>
                             )}
                         </div>
                     )}

@@ -15,6 +15,9 @@ import { YellowButton } from '../shared/yellow_button';
 import { RedButton } from '../shared/red-button';
 import { ButtonContainer } from '../shared/button-container';
 import { ReturnButton } from '../shared/shared-return-button';
+import { ActivateFieldGame, DeactivateFieldGame } from '../API/field-game';
+import { useState } from 'react';
+import { MessageResponse } from '../Models/MessageResponse';
 
 
 const ManageEvent = () => {
@@ -115,6 +118,42 @@ const ManageEvent = () => {
         };
     };
 
+    const [message, setMessage] = useState<MessageResponse | null>(null);
+
+    const handleActivateFieldGame = async (fieldGameId: string) => {
+        const confirmActivate = window.confirm("Czy na pewno chcesz aktywować tę grę terenową?");
+        if (confirmActivate){
+            const response = await ActivateFieldGame(API_BASE_URL, parseInt(fieldGameId));
+            if (!response.ok) {
+                setMessage(await response.json());
+                throw new Error("Nie udało się aktywować gry terenowej");
+            }
+            fieldGames.map((fieldGame: any) => {
+                if (fieldGame.id == fieldGameId) {
+                    fieldGame.active = true;
+                }
+            });
+            setMessage(await response.json());
+        }
+    }
+
+    const handleDeactivateFieldGame = async (fieldGameId: string) => {
+        const confirmDeactivate = window.confirm("Czy na pewno chcesz dezaktywować tę grę terenową?");
+        if (confirmDeactivate){
+            const response = await DeactivateFieldGame(API_BASE_URL, parseInt(fieldGameId));
+            if (!response.ok) {
+                setMessage(await response.json());
+                throw new Error("Nie udało się dezaktywować gry terenowej");
+            }
+            fieldGames.map((fieldGame: any) => {
+                if (fieldGame.id == fieldGameId) {
+                    fieldGame.active = false;
+                }
+            });
+            setMessage(await response.json());
+        }
+    }
+
     return (
         <MainBox>
             <MainPageHeader>Nazwa wydarzenia: {eventData?.name}</MainPageHeader>
@@ -144,8 +183,11 @@ const ManageEvent = () => {
                                 <YellowButton onClick={() => navigate(`/edit-field-game/${eventData.id}/${fieldGame.id}`)}>Edytuj grę terenową</YellowButton>
                                 <RedButton onClick={() => handleDeleteFieldGame(fieldGame.id)}>Usuń grę terenową</RedButton>
                                 <YellowButton onClick={() => navigate(`/qr-codes/${eventData.id}/${fieldGame.id}`)}>Zarządzaj kodami QR</YellowButton>
-                                <GreenButton onClick={() => navigate("")}>Aktywuj grę</GreenButton>
+                                {!fieldGame.active ? <GreenButton onClick={() => handleActivateFieldGame(fieldGame.id)}>Aktywuj grę</GreenButton> :
+                                <RedButton onClick={() => handleDeactivateFieldGame(fieldGame.id)}>Zakończ grę</RedButton>}
+                                
                             </ButtonContainer>
+                            {message && <SharedP>{message.message}</SharedP>}
                         </WhiteBox>
 
                     })

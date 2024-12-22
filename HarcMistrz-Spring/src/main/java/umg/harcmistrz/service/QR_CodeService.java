@@ -24,6 +24,8 @@ import umg.harcmistrz.requests.UpdateQR_CodeRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -138,6 +140,11 @@ public class QR_CodeService {
             return new MessageResponse("Kod QR nie istnieje!", false);
         }
 
+        // check if qr code was already scanned
+        if (qr_code.get().isScanned()) {
+            return new MessageResponse("Kod QR został już zeskanowany!", false);
+        }
+
         // check if field game is activated
         FieldGame fieldGame = qr_code.get().getFieldGame();
         if (fieldGame == null) {
@@ -162,8 +169,9 @@ public class QR_CodeService {
         QR_Scan qr_scan = new QR_Scan();
         qr_scan.setQrCode(qr_code.get());
         qr_scan.setPoints(qr_code.get().getPoints());
-        qr_scan.setScanTime(qrCode.getScanTime());
+        qr_scan.setScanTime(OffsetDateTime.now(ZoneId.of("Europe/Warsaw")));
         qr_scan.setScout(scout);
+        qr_scanRepository.save(qr_scan);
 
         return new MessageResponse("Zeskanowano kod QR!", true);
     }

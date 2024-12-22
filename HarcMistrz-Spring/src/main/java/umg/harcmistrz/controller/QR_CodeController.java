@@ -85,10 +85,10 @@ public class QR_CodeController {
     @PostMapping("/scanQRCode")
     public ResponseEntity<MessageResponse> scanQRCode(@RequestBody ScanQR_CodeRequest qrCode) {
         try {
-            qr_codeService.scanQRCode(qrCode);
-            return ResponseEntity.ok(new MessageResponse("Zeskanowano kod QR!", true));
+            return ResponseEntity.ok(qr_codeService.scanQRCode(qrCode));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
+
 }

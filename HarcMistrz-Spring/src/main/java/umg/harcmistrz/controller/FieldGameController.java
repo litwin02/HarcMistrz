@@ -84,8 +84,14 @@ public class FieldGameController {
         return ResponseEntity.ok(new MessageResponse("Usunięto grę terenową!", true));
     }
 
-    @PostMapping("/activateFieldGame/{id}")
+    @PutMapping("/activateFieldGame/{id}")
     public ResponseEntity<MessageResponse> activateFieldGame(@PathVariable Long id) {
         return ResponseEntity.ok(fieldGameService.activateFieldGame(id));
     }
+
+    @PutMapping("/deactivateFieldGame/{id}")
+    public ResponseEntity<MessageResponse> deactivateFieldGame(@PathVariable Long id) {
+        return ResponseEntity.ok(fieldGameService.deactivateFieldGame(id));
+    }
+
 }

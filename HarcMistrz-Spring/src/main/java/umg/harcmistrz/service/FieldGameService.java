@@ -72,4 +72,14 @@ public class FieldGameService {
         }
         return new MessageResponse("Nie udało się aktywować gry terenowej!", false);
     }
+
+    public MessageResponse deactivateFieldGame(Long id) {
+        FieldGame fieldGame = fieldGameRepository.findById(id).orElse(null);
+        if (fieldGame != null) {
+            fieldGame.setIsActivated(false);
+            fieldGameRepository.save(fieldGame);
+            return new MessageResponse("Dezaktywowano grę terenową!", true);
+        }
+        return new MessageResponse("Nie udało się dezaktywować gry terenowej!", false);
+    }
 }
