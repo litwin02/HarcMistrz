@@ -151,7 +151,13 @@ const ManageEvent = () => {
                 }
             });
             setMessage(await response.json());
+            fieldGames.map((fieldGame: any) => {
+                if (fieldGame.id == fieldGameId) {
+                    fieldGame.active = false;
+                }
+            });
         }
+
     }
 
     return (
@@ -183,9 +189,11 @@ const ManageEvent = () => {
                                 <YellowButton onClick={() => navigate(`/edit-field-game/${eventData.id}/${fieldGame.id}`)}>Edytuj grę terenową</YellowButton>
                                 <RedButton onClick={() => handleDeleteFieldGame(fieldGame.id)}>Usuń grę terenową</RedButton>
                                 <YellowButton onClick={() => navigate(`/qr-codes/${eventData.id}/${fieldGame.id}`)}>Zarządzaj kodami QR</YellowButton>
-                                {!fieldGame.active ? <GreenButton onClick={() => handleActivateFieldGame(fieldGame.id)}>Aktywuj grę</GreenButton> :
+                                {!fieldGame.isActivated ? <GreenButton onClick={() => handleActivateFieldGame(fieldGame.id)}>Aktywuj grę</GreenButton> :
                                 <RedButton onClick={() => handleDeactivateFieldGame(fieldGame.id)}>Zakończ grę</RedButton>}
-                                
+                                {!fieldGame.isActivated && 
+                                <YellowButton onClick={() => navigate(`/field-game-results/${eventData.id}/${fieldGame.id}`)}>Zobacz wyniki gry</YellowButton>
+                        }
                             </ButtonContainer>
                             {message && <SharedP>{message.message}</SharedP>}
                         </WhiteBox>

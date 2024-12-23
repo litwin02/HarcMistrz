@@ -6,10 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import umg.harcmistrz.Models.FieldGame;
 import umg.harcmistrz.dto.FieldGameDTO;
+import umg.harcmistrz.dto.FieldGameResultDTO;
+import umg.harcmistrz.dto.FieldGameScoutResultDTO;
 import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.requests.EditFieldGameRequest;
 import umg.harcmistrz.requests.NewFieldGameRequest;
 import umg.harcmistrz.service.FieldGameService;
+import umg.harcmistrz.service.QR_ScanService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +24,9 @@ public class FieldGameController {
 
     @Autowired
     private FieldGameService fieldGameService;
+
+    @Autowired
+    private QR_ScanService qr_scanService;
 
     @PostMapping("/createNewFieldGame")
     public ResponseEntity<MessageResponse> createNewFieldGame(@RequestBody NewFieldGameRequest newFieldGameRequest) {
@@ -94,4 +100,13 @@ public class FieldGameController {
         return ResponseEntity.ok(fieldGameService.deactivateFieldGame(id));
     }
 
+    @GetMapping("/getFieldGameResults/{fieldGameId}")
+    public ResponseEntity<List<FieldGameResultDTO>> getFieldGameResults(@PathVariable Long fieldGameId) {
+        return ResponseEntity.ok(qr_scanService.getResultsForFieldGame(fieldGameId));
+    }
+
+    @GetMapping("/getFieldGameResultsForScout/{fieldGameId}/{scoutId}")
+    public ResponseEntity<FieldGameScoutResultDTO> getFieldGameResultsForScout(@PathVariable Long fieldGameId, @PathVariable Long scoutId) {
+        return ResponseEntity.ok(qr_scanService.getResultFromFieldGameForScout(fieldGameId, scoutId));
+    }
 }

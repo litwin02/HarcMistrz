@@ -17,6 +17,7 @@ import { ButtonContainer } from "../shared/button-container";
 import { RedButton } from "../shared/red-button";
 import { ReturnButton } from "../shared/shared-return-button";
 import { HorizontalButtonContainer } from "../shared/horizontal-button-container";
+import { CheckWhoScannedCode, QR_Scan } from "../API/qr-code";
 
 
 const QR_Codes = () => {
@@ -124,49 +125,83 @@ const QR_Codes = () => {
         };
     };
 
+    const [qrScans, setQRScans] = useState<QR_Scan[]>([]);
+
+    useEffect(() => {
+        if (qrCodes) {
+            qrCodes.forEach(code => {
+                if (code.scanned) {
+                    const fetchScan = async () => {
+                        const scan = await CheckWhoScannedCode(API_BASE_URL, code.id);
+                        setQRScans(prev => [...prev, scan]);
+                    };
+                    fetchScan();
+                }
+            });
+        }
+    }, [qrCodes]);
+
     return (
         <MainBox>
             <WhiteBoxColumn>
                 <MainPageHeader>Kody QR gry: <BoldText>{fieldGame?.name}</BoldText></MainPageHeader>
-                <WhiteBox>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {qrCodesIsLoading && <p>Ładowanie...</p>}
-                    {qrCodesError && <p>Wystąpił błąd: {qrCodesError.message}</p>}
-                    {qrCodes && qrCodes.map((qrCode: any, index: any) => (
-                        <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
-                            <SharedP><BoldText>Opis:</BoldText> {qrCode.description}</SharedP>
-                            <SharedP><BoldText>Punkty:</BoldText> {qrCode.points}</SharedP>
-                            <SharedP><BoldText>Zeskanowany:</BoldText> {qrCode.scanned ? "Tak" : "Nie"}</SharedP>
-
-                            {qrCodeImagesIsLoading && <SharedP>Ładowanie obrazka...</SharedP>}
-                            {qrCodeImagesError && <SharedP>Wystąpił błąd: {qrCodeImagesError.message}</SharedP>}
-                            {qrCodeImages && qrCodeImages[index] && (
-                                <img src={qrCodeImages[index]} alt="Kod QR" className="my-2" />
-                            )}
-
-                            {qrCodeImages && qrCodeImages[index] && (
-                                <HorizontalButtonContainer>
-                                    <GreenButton>
-                                    <a href={qrCodeImages[index]}
-                                        download={`QRCode_${qrCode.qrCode}.png`}>
-                                        Pobierz kod QR
-                                        </a>
-                                    </GreenButton>
-                                    <YellowButton onClick={() => navigate(`/edit-qr-code/${eventId}/${fieldGameId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</YellowButton>
-                                    <RedButton onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</RedButton>
-                                </HorizontalButtonContainer>
-                            )}
-                        </div>
-                    ))}
-                    </div>
-                    {(!qrCodes || qrCodes.length === 0) && <SharedP>Brak kodów QR dla tej gry terenowej.</SharedP>}
-                </WhiteBox>
                 <WhiteBox>
                     <ButtonContainer>
                         <GreenButton onClick={() => navigate(`/new-qr-code/${eventId}/${fieldGameId}`)}>Dodaj kod QR</GreenButton>
                     </ButtonContainer>
                 </WhiteBox>
                 <ReturnButton to={`/event/${eventId}`}>Wróć do gier terenowych</ReturnButton>
+                <WhiteBox>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {qrCodesIsLoading && <p>Ładowanie...</p>}
+                        {qrCodesError && <p>Wystąpił błąd: {qrCodesError.message}</p>}
+                        {qrCodes && qrCodes.map((qrCode: any, index: any) => (
+                            <div key={index} className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
+                                <SharedP><BoldText>Opis:</BoldText> {qrCode.description}</SharedP>
+                                <SharedP><BoldText>Punkty:</BoldText> {qrCode.points}</SharedP>
+                                <SharedP><BoldText>Zeskanowany:</BoldText> {qrCode.scanned ? "Tak" : "Nie"}</SharedP>
+                                {(() => {
+                                    const foundScan = qrScans.find(scan => scan.qrCodeId === qrCode.id);
+                                    if (foundScan) {
+                                        return (
+                                            <>
+                                                <SharedP>
+                                                    <BoldText>Zeskanowane przez:</BoldText> {foundScan.firstName} {foundScan.lastName}
+                                                </SharedP>
+                                                <SharedP>
+                                                    <BoldText>O godzinie:</BoldText> {foundScan.scanTime}
+                                                </SharedP>
+                                            </>
+                                        );
+                                    }
+                                    return null;
+                                })()}
+
+
+                                {qrCodeImagesIsLoading && <SharedP>Ładowanie obrazka...</SharedP>}
+                                {qrCodeImagesError && <SharedP>Wystąpił błąd: {qrCodeImagesError.message}</SharedP>}
+                                {qrCodeImages && qrCodeImages[index] && (
+                                    <img src={qrCodeImages[index]} alt="Kod QR" className="my-2" />
+                                )}
+
+                                {qrCodeImages && qrCodeImages[index] && (
+                                    <HorizontalButtonContainer>
+                                        <GreenButton>
+                                            <a href={qrCodeImages[index]}
+                                                download={`QRCode_${qrCode.qrCode}.png`}>
+                                                Pobierz kod QR
+                                            </a>
+                                        </GreenButton>
+                                        <YellowButton onClick={() => navigate(`/edit-qr-code/${eventId}/${fieldGameId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</YellowButton>
+                                        <RedButton onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</RedButton>
+                                    </HorizontalButtonContainer>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                    {(!qrCodes || qrCodes.length === 0) && <SharedP>Brak kodów QR dla tej gry terenowej.</SharedP>}
+                </WhiteBox>
+
             </WhiteBoxColumn>
         </MainBox>
     );

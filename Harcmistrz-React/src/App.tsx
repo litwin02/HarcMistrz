@@ -25,6 +25,7 @@ import ManageTeam from './components/Team/ManageTeam';
 import EditTeam from './components/Team/EditTeam';
 import EventDetails from './components/Events/EventDetails';
 import PlayFieldGame from './components/FieldGames/PlayFieldGame';
+import FieldGameResult from './components/FieldGames/FieldGameResult';
 
 function App() {
   const router = createBrowserRouter([
@@ -216,6 +217,16 @@ function App() {
         <ProtectedRoute allowedRoles={["SCOUT"]}>
           <Layout>
             <PlayFieldGame />
+          </Layout>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/field-game-results/:eventId/:fieldGameId',
+      element: (
+        <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
+          <Layout>
+            <FieldGameResult />
           </Layout>
         </ProtectedRoute>
       )

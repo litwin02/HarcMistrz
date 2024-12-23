@@ -5,17 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QR_CodeDTO {
+public class QR_ScanDTO {
     private Long id;
-    private Long fieldGameId;
-    private UUID qrCode;
+    private Long scoutId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private Long qrCodeId;
+    private String scanTime;
     private int points;
-    private Boolean scanned;
-    private String description;
 }

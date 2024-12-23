@@ -8,7 +8,7 @@ import { WhiteBox } from "../shared/white-box";
 import { WhiteBoxColumn } from "../shared/white-box-column";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useEffect } from "react";
-import { QR_CodeString, QRCodeScanRequest, ScanQRCode } from "../API/field-game";
+import { GetPointsForScout, QR_CodeString, QRCodeScanRequest, ScanQRCode } from "../API/field-game";
 import { MessageResponse } from "../Models/MessageResponse";
 import { useApi } from "../../ApiContext";
 import { useParams } from "react-router-dom";
@@ -18,12 +18,12 @@ const PlayFieldGame = () => {
     const API_BASE_URL = useApi();
     const { fieldGameId } = useParams<{ fieldGameId: string }>();
 
-    const [qrData, setQrData] = useState<QR_CodeString>();
     const [points, setPoints] = useState<number>(0);
     const [message, setMessage] = useState<MessageResponse>();
 
     // Inicjalizacja skanera w momencie, gdy element DOM istnieje
     useEffect(() => {
+        getPoints();
         const scanner = new Html5QrcodeScanner(
             "qr-reader",
             { fps: 10, qrbox: 250 },
@@ -38,12 +38,16 @@ const PlayFieldGame = () => {
                     scoutId: parseInt(localStorage.getItem("id")!),
                     fieldGameId: parseInt(fieldGameId),
                 };
-                console.log(scanRequest);
                 const response = await ScanQRCode(API_BASE_URL, scanRequest);
                 setMessage(response);
-                if (response && response.success) {
-                    setPoints(prevPoints => prevPoints + data.points);
-                }
+
+            }
+        }
+
+        async function getPoints() {
+            if (fieldGameId) {
+                const response = await GetPointsForScout(API_BASE_URL, parseInt(fieldGameId), parseInt(localStorage.getItem("id")!));
+                setPoints(response);
             }
         }
 
@@ -78,7 +82,7 @@ const PlayFieldGame = () => {
                 </WhiteBox>
                 <div id="qr-reader" className="mt-4 bg-white lg:w-1/2 md:w-full sm:full"></div>
             </WhiteBoxColumn>
-            
+
         </MainBox>
     );
 };

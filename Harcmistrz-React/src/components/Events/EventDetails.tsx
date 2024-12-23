@@ -13,12 +13,14 @@ import { SharedH2 } from "../shared/shared-h2";
 import { SharedP } from "../shared/shared-p";
 import { ReturnButton } from "../shared/shared-return-button";
 import { GreenButton } from "../shared/shared-green-button";
+import { FieldGameScoutResult, GetResultForScout } from "../API/field-game";
 
 const EventDetails = () => {
     const API_BASE_URL = useApi();
     const { eventId } = useParams<{ eventId: string }>();
     const [event, setEvent] = useState<Event>();
     const [fieldGame, setFieldGame] = useState<FieldGameDTO>();
+    const [result, setResult] = useState<FieldGameScoutResult>();
     const navigate = useNavigate();
 
     const getEventById = async (eventId: number) => {
@@ -72,6 +74,15 @@ const EventDetails = () => {
         }
     }, [eventId]);
 
+    useEffect(() => {
+        async function getResults(fieldGameId: number, scoutId: number) {
+            const response = await GetResultForScout(API_BASE_URL, fieldGameId, scoutId);
+            setResult(response);
+        }
+        if (fieldGame) {
+            getResults(fieldGame.id, parseInt(localStorage.getItem('id') ?? "")).catch(error => console.error(error));
+        }
+    }, [fieldGame]);
 
     return (
         <MainBox>
@@ -94,7 +105,13 @@ const EventDetails = () => {
                             <SharedP>Opis: <BoldText>{fieldGame.description}</BoldText></SharedP>
                             <SharedP>Czy jest aktywowana: {fieldGame.isActivated ? "Tak" : "Nie"}</SharedP>
                             {fieldGame.isActivated && (
-                               <GreenButton onClick={() => navigate(`/play-field-game/${eventId}/${fieldGame.id}`)}>Przejdź do gry</GreenButton>
+                                <GreenButton onClick={() => navigate(`/play-field-game/${eventId}/${fieldGame.id}`)}>Przejdź do gry</GreenButton>
+                            )}
+                            {result && (
+                                <div>
+                                    <SharedP>Twoje punkty: <BoldText>{result.points}</BoldText></SharedP>
+                                    <SharedP>Liczba zeskanowanych kodów: <BoldText>{result.codeScannedCount}</BoldText></SharedP>
+                                </div>
                             )}
                         </div>
                     )}
