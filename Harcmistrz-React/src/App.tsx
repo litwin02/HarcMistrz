@@ -26,6 +26,9 @@ import EditTeam from './components/Team/EditTeam';
 import EventDetails from './components/Events/EventDetails';
 import PlayFieldGame from './components/FieldGames/PlayFieldGame';
 import FieldGameResult from './components/FieldGames/FieldGameResult';
+import UserProfile from './components/UserProfile/UserProfile';
+import EditUserProfile from './components/UserProfile/EditUserProfile';
+import EditPassword from './components/UserProfile/EditPassword';
 
 function App() {
   const router = createBrowserRouter([
@@ -227,6 +230,36 @@ function App() {
         <ProtectedRoute allowedRoles={["TEAM_LEADER"]}>
           <Layout>
             <FieldGameResult />
+          </Layout>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/user-profile',
+      element: (
+        <ProtectedRoute allowedRoles={["SCOUT", "TEAM_LEADER"]}>
+          <Layout>
+            <UserProfile />
+          </Layout>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/edit-profile',
+      element: (
+        <ProtectedRoute allowedRoles={["SCOUT", "TEAM_LEADER"]}>
+          <Layout>
+            <EditUserProfile />
+          </Layout>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/change-password',
+      element: (
+        <ProtectedRoute allowedRoles={["SCOUT", "TEAM_LEADER"]}>
+          <Layout>
+            <EditPassword />
           </Layout>
         </ProtectedRoute>
       )

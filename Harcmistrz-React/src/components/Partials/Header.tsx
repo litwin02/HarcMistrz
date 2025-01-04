@@ -15,6 +15,7 @@ export default function Header(){
                     </div>
                     
                     <ul className="flex items-center justify-between text-xl">
+                        {token && <li className="hover:text-a_yellow mr-5"><a href="/user-profile">Profil</a></li>}
                         {token && <li className="hover:text-a_yellow"><a href="/logout" className="">Wyloguj się</a></li>}
                     </ul>
                     

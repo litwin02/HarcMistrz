@@ -59,7 +59,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse changePassword(ChangePasswordRequest changePasswordRequest){
         var user = userRepository.findByEmail(changePasswordRequest.getEmail())
-                .orElseThrow(() -> new ApiRequestException("Użytkownik o podanym adresie email nie istnieje!"));
+                .orElseThrow(() -> new RuntimeException("Użytkownik o podanym adresie email nie istnieje!"));
 
         if(passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
@@ -72,7 +72,7 @@ public class AuthenticationService {
                     .build();
         }
         else {
-            throw new ApiRequestException("Stare hasło nie jest poprawne!");
+            throw new RuntimeException("Stare hasło nie jest poprawne!");
         }
     }
 }
