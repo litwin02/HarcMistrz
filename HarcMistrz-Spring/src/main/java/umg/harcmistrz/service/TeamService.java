@@ -133,6 +133,9 @@ public class TeamService {
         return "Usunięto drużynę!";
     }
 
+    public List<Team> getAllTeams() {
+        return teamRepository.findAll();
+    }
 
     // PRIVATE METHODS
 

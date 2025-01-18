@@ -19,7 +19,7 @@ public class FieldGame {
     private Long id;
     private String name;
     private String description;
-    private Boolean isActivated;
+    private FieldGameStatus status;
 
     @OneToOne
     @JoinColumn(name = "event_id")

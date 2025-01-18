@@ -22,7 +22,7 @@ export const getEventById = async (API_BASE_URL: string, eventId: number): Promi
     }
 }
 
-export const getEventsByTeamId = async (API_BASE_URL: string ,teamId: number): Promise<Event[]> => {
+export const getEventsByTeamId = async (API_BASE_URL: string, teamId: number): Promise<Event[]> => {
     try {
         const response = await fetch(`${API_BASE_URL}/events/getAllEventsByTeamId/${teamId}`, {
             method: 'GET',
@@ -35,7 +35,9 @@ export const getEventsByTeamId = async (API_BASE_URL: string ,teamId: number): P
             throw new Error("Nie udało się pobrać wydarzeń");
         }
         const fetchData = await response.json();
-        fetchData.date = dayjs(fetchData.date);
+        for(let i = 0; i < fetchData.length; i++) {
+            fetchData[i].date = dayjs(fetchData[i].date);
+        }
         return fetchData;
     } catch (error) {
         console.error(error);

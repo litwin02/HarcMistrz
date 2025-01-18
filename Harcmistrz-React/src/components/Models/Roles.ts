@@ -1,6 +1,6 @@
 export enum Roles{
-    SCOUT,
-    TEAM_LEADER,
-    PARENT,
-    ADMIN
+    SCOUT = "SCOUT",
+    TEAM_LEADER = "TEAM_LEADER",
+    PARENT = "PARENT",
+    ADMIN = "ADMIN"
 }

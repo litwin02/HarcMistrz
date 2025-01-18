@@ -43,6 +43,12 @@ const Dashboard = () => {
 
             fetchData();
         }
+        if(role === 'SCOUT') {
+            navigate('/user-dashboard');
+        }
+        if(role === 'ADMIN') {
+            navigate('/admin');
+        }
     }, [role]);
 
     const navigateToEventManagement = (id: string) => {

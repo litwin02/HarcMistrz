@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import umg.harcmistrz.Models.FieldGameStatus;
 
 @Data
 @Builder
@@ -13,6 +14,6 @@ public class FieldGameDTO {
     private Long id;
     private String name;
     private String description;
-    private Boolean isActivated;
+    private FieldGameStatus status;
     private Long eventId;
 }

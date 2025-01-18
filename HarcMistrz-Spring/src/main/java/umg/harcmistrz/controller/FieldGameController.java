@@ -44,7 +44,7 @@ public class FieldGameController {
                 .id(fieldGame.getId())
                 .name(fieldGame.getName())
                 .description(fieldGame.getDescription())
-                .isActivated(fieldGame.getIsActivated())
+                .status(fieldGame.getStatus())
                 .eventId(fieldGame.getEvent().getId())
                 .build());
     }
@@ -59,7 +59,7 @@ public class FieldGameController {
                 .id(fieldGame.getId())
                 .name(fieldGame.getName())
                 .description(fieldGame.getDescription())
-                .isActivated(fieldGame.getIsActivated())
+                .status(fieldGame.getStatus())
                 .eventId(fieldGame.getEvent().getId())
                 .build());
     }
@@ -72,7 +72,7 @@ public class FieldGameController {
                         .id(fieldGame.getId())
                         .name(fieldGame.getName())
                         .description(fieldGame.getDescription())
-                        .isActivated(fieldGame.getIsActivated())
+                        .status(fieldGame.getStatus())
                         .eventId(fieldGame.getEvent().getId())
                         .build())
                 .collect(Collectors.toList()));

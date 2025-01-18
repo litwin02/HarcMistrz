@@ -1,6 +1,5 @@
 package umg.harcmistrz.Models;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,21 +12,20 @@ import java.time.OffsetDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "qr_scans")
-public class QR_Scan {
+@Entity(name = "messages")
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "scout_id")
-    private User scout;
+    @JoinColumn(name = "sender_id")
+    private User sender;
 
-    @OneToOne
-    @Nullable
-    @JoinColumn(name = "qr_code_id")
-    private QR_Code qrCode;
-    private OffsetDateTime scanTime;
-    private int points;
+    @ManyToOne
+    @JoinColumn(name = "recipient_id")
+    private User recipient;
 
+    private String message;
+    private OffsetDateTime timestamp;
 }

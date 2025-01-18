@@ -14,4 +14,6 @@ public class FieldGameScoutResultDTO {
     private Long scoutId;
     private int points;
     private int codeScannedCount;
+    private boolean hasScoutWon;
+    private int scoreboardPosition;
 }

@@ -7,6 +7,7 @@ export interface UserInformation {
     lastName: string;
     email: string;
     phoneNumber: string;
+    role?: Roles;
 }
 
 export const GetUserInformation = async (API_BASE_URL: string, userId: string) : Promise<UserInformation> => {
@@ -95,6 +96,25 @@ export const DeleteUser = async (API_BASE_URL: string, userId: string) : Promise
         });
         if (!response.ok) {
             throw new Error("Nie udało się usunąć użytkownika");
+        }
+        return await response.json();
+    }
+    catch (e: any) {
+        throw e;
+    }
+}
+
+export const GetAllUsers = async (API_BASE_URL: string) : Promise<UserInformation[]> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/getAllUsers`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Nie udało się pobrać listy użytkowników");
         }
         return await response.json();
     }

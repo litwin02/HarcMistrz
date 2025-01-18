@@ -26,6 +26,22 @@ export interface FieldGameScoutResult {
     scoutId: number;
     points: number;
     codeScannedCount: number;
+    hasScoutWon?: boolean;
+    scoreboardPosition?: number;
+}
+
+export enum FieldGameStatus {
+    NOT_STARTED = "NOT_STARTED",
+    IN_PROGRESS = "IN_PROGRESS",
+    FINISHED = "FINISHED"
+}
+
+export interface FieldGame{
+    id: number;
+    name: string;
+    description: string;
+    status: FieldGameStatus;
+    eventId: number;
 }
 
 export const ActivateFieldGame = async (API_BASE_URL: string, fieldGameId: number) => {

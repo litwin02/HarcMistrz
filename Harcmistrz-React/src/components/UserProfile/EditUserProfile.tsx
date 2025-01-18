@@ -12,12 +12,14 @@ import { GreenButton } from "../shared/shared-green-button";
 import { Message } from "../shared/message";
 import { MessageResponse } from "../Models/MessageResponse";
 import { ReturnButton } from "../shared/shared-return-button";
+import { useParams } from "react-router-dom";
 
 
 const EditUserProfile = () => {
-    const userId = localStorage.getItem("id");
+    const userId = useParams<{ id: string }>().id;
     const API_BASE_URL = useApi();
     const [user, setUser] = useState<UserInformation | null>(null);
+    const role = localStorage.getItem("role");
 
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
@@ -98,7 +100,8 @@ const EditUserProfile = () => {
                     </form>
                 </WhiteBox>
                 <Message>{message && message.message}</Message>
-                <ReturnButton to="/user-profile">Powrót do profilu</ReturnButton>
+                {role === "ADMIN" && <ReturnButton to="/manage-users">Powrót do zarządzania użytkownikami</ReturnButton>}
+                {role !== "ADMIN" && <ReturnButton to="/user-profile">Powrót do profilu</ReturnButton>}
             </WhiteBoxColumn>
         </MainBox>
     );

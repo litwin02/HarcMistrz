@@ -50,7 +50,7 @@ const UserProfile = () => {
                     <SharedP>Email: <BoldText>{user?.email}</BoldText></SharedP>
                     <SharedP>Telefon: <BoldText>{user?.phoneNumber}</BoldText></SharedP>
                     <ButtonContainer>
-                        <YellowButton onClick={() => navigate("/edit-profile")}>Edytuj informacje</YellowButton>
+                        <YellowButton onClick={() => navigate(`/edit-profile/${userId}`)}>Edytuj informacje</YellowButton>
                         <YellowButton onClick={() => navigate("/change-password")}>Zmień hasło</YellowButton>
                         <RedButton onClick={handleDelete}>Usuń konto</RedButton>
                     </ButtonContainer>

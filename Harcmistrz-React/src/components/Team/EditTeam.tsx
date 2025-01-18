@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BasicTeamResponse } from "../Models/BasicTeamResponse";
 import { useApi } from "../../ApiContext";
-import { editTeam, getTeamByTeamLeaderId } from "../API/team";
+import { editTeam, GetTeamById, getTeamByTeamLeaderId } from "../API/team";
 import { MainBox } from "../shared/main-box";
 import { WhiteBoxColumn } from "../shared/white-box-column";
 import { SharedH2 } from "../shared/shared-h2";
@@ -9,12 +9,12 @@ import { WhiteBox } from "../shared/white-box";
 import { MainPageHeader } from "../shared/main-page-header";
 import { GreenButton } from "../shared/shared-green-button";
 import { ReturnButton } from "../shared/shared-return-button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FormDiv } from "../shared/form-div";
 import { FormLabel } from "../shared/form-label";
 
 const EditTeam = () => {
-    const teamLeaderId = localStorage.getItem('id');
+    const { teamId } = useParams<{ teamId: string }>();
     const [team, setTeam] = useState<BasicTeamResponse | null>(null);
     const [name, setName] = useState<string>('');
     const API_BASE_URL = useApi();
@@ -22,9 +22,9 @@ const EditTeam = () => {
 
     // get team by team leader id
     useEffect(() => {
-        const response = getTeamByTeamLeaderId(API_BASE_URL, parseInt(teamLeaderId!));
+        const response = GetTeamById(API_BASE_URL, parseInt(teamId!));
         response.then((team) => setTeam(team));
-    }, [teamLeaderId, API_BASE_URL]);
+    }, [teamId, API_BASE_URL]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

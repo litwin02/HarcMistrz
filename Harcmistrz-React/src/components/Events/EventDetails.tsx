@@ -3,7 +3,6 @@ import { useApi } from "../../ApiContext";
 import { Event } from "../Models/EventModel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { FieldGameDTO } from "../Models/FieldGameDTO";
 import { MainBox } from "../shared/main-box";
 import { WhiteBoxColumn } from "../shared/white-box-column";
 import { MainPageHeader } from "../shared/main-page-header";
@@ -13,13 +12,13 @@ import { SharedH2 } from "../shared/shared-h2";
 import { SharedP } from "../shared/shared-p";
 import { ReturnButton } from "../shared/shared-return-button";
 import { GreenButton } from "../shared/shared-green-button";
-import { FieldGameScoutResult, GetResultForScout } from "../API/field-game";
+import { FieldGame, FieldGameScoutResult, GetResultForScout } from "../API/field-game";
 
 const EventDetails = () => {
     const API_BASE_URL = useApi();
     const { eventId } = useParams<{ eventId: string }>();
     const [event, setEvent] = useState<Event>();
-    const [fieldGame, setFieldGame] = useState<FieldGameDTO>();
+    const [fieldGame, setFieldGame] = useState<FieldGame>();
     const [result, setResult] = useState<FieldGameScoutResult>();
     const navigate = useNavigate();
 
@@ -79,10 +78,11 @@ const EventDetails = () => {
             const response = await GetResultForScout(API_BASE_URL, fieldGameId, scoutId);
             setResult(response);
         }
-        if (fieldGame) {
+        if (fieldGame && fieldGame.status === "FINISHED") {
             getResults(fieldGame.id, parseInt(localStorage.getItem('id') ?? "")).catch(error => console.error(error));
         }
     }, [fieldGame]);
+
 
     return (
         <MainBox>
@@ -100,18 +100,21 @@ const EventDetails = () => {
                 <WhiteBox>
                     {fieldGame && (
                         <div>
-                            <SharedH2>Gra terenowa:</SharedH2>
+                            <SharedH2>Gra terenowa</SharedH2>
                             <SharedP>Nazwa: <BoldText>{fieldGame.name}</BoldText></SharedP>
                             <SharedP>Opis: <BoldText>{fieldGame.description}</BoldText></SharedP>
-                            <SharedP>Czy jest aktywowana: {fieldGame.isActivated ? "Tak" : "Nie"}</SharedP>
-                            {fieldGame.isActivated && (
-                                <GreenButton onClick={() => navigate(`/play-field-game/${eventId}/${fieldGame.id}`)}>Przejdź do gry</GreenButton>
-                            )}
-                            {result && (
+                            {fieldGame.status !== "IN_PROGRESS" && fieldGame.status !== "FINISHED" && 
+                            <SharedP><BoldText>Odświeżaj regularnie stronę, aby sprawdzić czy gra terenowa została aktywowana</BoldText></SharedP>}
+                            {result && fieldGame.status === "FINISHED" && (
                                 <div>
                                     <SharedP>Twoje punkty: <BoldText>{result.points}</BoldText></SharedP>
                                     <SharedP>Liczba zeskanowanych kodów: <BoldText>{result.codeScannedCount}</BoldText></SharedP>
+                                    <SharedP><BoldText>{result.hasScoutWon ? "Gratulacje! Wygrałeś!" : "Dziękujemy za udział w grze."}</BoldText></SharedP>
+                                    <SharedP>Twoja pozycja w rankingu: <BoldText>{result.scoreboardPosition}</BoldText></SharedP>
                                 </div>
+                            )}
+                            {fieldGame && fieldGame.status === "IN_PROGRESS" && (
+                                <GreenButton onClick={() => navigate(`/play-field-game/${eventId}/${fieldGame.id}`)}>Przejdź do gry</GreenButton>
                             )}
                         </div>
                     )}

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.QR_Code;
 import umg.harcmistrz.Models.QR_Scan;
 import umg.harcmistrz.Models.ScoutInTeam;
+import umg.harcmistrz.Models.User;
 import umg.harcmistrz.dto.FieldGameResultDTO;
 import umg.harcmistrz.dto.FieldGameScoutResultDTO;
 import umg.harcmistrz.dto.QR_ScanDTO;
@@ -26,14 +27,14 @@ public class QR_ScanService {
     public QR_ScanDTO checkWhoScannedQRCode(Long qrCodeId) {
         QR_Scan qr_scan = qr_scanRepository.findByQrCodeId(qrCodeId);
         if(qr_scan != null) {
-            ScoutInTeam scout = qr_scan.getScout();
+            User scout = qr_scan.getScout();
             assert qr_scan.getQrCode() != null;
             return QR_ScanDTO.builder()
                     .id(qr_scan.getId())
-                    .scoutId(scout.getScout().getId())
-                    .firstName(scout.getScout().getFirstName())
-                    .lastName(scout.getScout().getLastName())
-                    .email(scout.getScout().getEmail())
+                    .scoutId(scout.getId())
+                    .firstName(scout.getFirstName())
+                    .lastName(scout.getLastName())
+                    .email(scout.getEmail())
                     .qrCodeId(qr_scan.getQrCode().getId())
                     .scanTime(qr_scan.getScanTime().toString())
                     .points(qr_scan.getQrCode().getPoints())
@@ -67,12 +68,12 @@ public class QR_ScanService {
         // then we add the points from the qr_scan to the result
 
         for (QR_Scan qr_scan : qr_scans) {
-            Long scoutId = qr_scan.getScout().getScout().getId();
+            Long scoutId = qr_scan.getScout().getId();
             FieldGameResultDTO result = resultsMap.getOrDefault(scoutId, FieldGameResultDTO.builder()
                     .scoutId(scoutId)
-                    .firstName(qr_scan.getScout().getScout().getFirstName())
-                    .lastName(qr_scan.getScout().getScout().getLastName())
-                    .email(qr_scan.getScout().getScout().getEmail())
+                    .firstName(qr_scan.getScout().getFirstName())
+                    .lastName(qr_scan.getScout().getLastName())
+                    .email(qr_scan.getScout().getEmail())
                     .points(0)
                     .build());
 
@@ -100,11 +101,34 @@ public class QR_ScanService {
                 .filter(QR_Code::isScanned)
                 .count();
 
+        // get the best result
+        List<FieldGameResultDTO> results = getResultsForFieldGame(fieldGameId);
+        results.sort(Comparator.comparingInt(FieldGameResultDTO::getPoints).reversed());
+        FieldGameResultDTO bestResult = results.getFirst();
+
+        boolean hasScoutWon = bestResult != null && bestResult.getScoutId().equals(scoutId);
+        if(!hasScoutWon){
+            int scoutPosition = results.indexOf(results.stream()
+                    .filter(result -> result.getScoutId().equals(scoutId))
+                    .findFirst()
+                    .orElseThrow());
+            return FieldGameScoutResultDTO.builder()
+                    .fieldGameId(fieldGameId)
+                    .scoutId(scoutId)
+                    .points(points)
+                    .codeScannedCount(codeScannedCount)
+                    .hasScoutWon(false)
+                    .scoreboardPosition(scoutPosition + 1)
+                    .build();
+        }
+
         return FieldGameScoutResultDTO.builder()
                 .fieldGameId(fieldGameId)
                 .scoutId(scoutId)
                 .points(points)
                 .codeScannedCount(codeScannedCount)
+                .hasScoutWon(true)
+                .scoreboardPosition(1)
                 .build();
     }
 }

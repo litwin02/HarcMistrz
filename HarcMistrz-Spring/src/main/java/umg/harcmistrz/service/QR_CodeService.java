@@ -7,16 +7,10 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import umg.harcmistrz.Models.FieldGame;
-import umg.harcmistrz.Models.QR_Code;
-import umg.harcmistrz.Models.QR_Scan;
-import umg.harcmistrz.Models.ScoutInTeam;
+import umg.harcmistrz.Models.*;
 import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.dto.QR_CodeDTO;
-import umg.harcmistrz.repository.FieldGameRepository;
-import umg.harcmistrz.repository.QR_CodeRepository;
-import umg.harcmistrz.repository.QR_ScanRepository;
-import umg.harcmistrz.repository.ScoutInTeamRepository;
+import umg.harcmistrz.repository.*;
 import umg.harcmistrz.requests.NewQR_CodeRequest;
 import umg.harcmistrz.requests.ScanQR_CodeRequest;
 import umg.harcmistrz.requests.UpdateQR_CodeRequest;
@@ -47,6 +41,9 @@ public class QR_CodeService {
 
     @Autowired
     private final ScoutInTeamRepository scoutInTeamRepository;
+
+    @Autowired
+    private final UserService userService;
 
     public List<QR_CodeDTO> getQRCodesByFieldGameId(Long id) {
         List<QR_Code> qr_codes = qr_codeRepository.findByFieldGameId(id);
@@ -134,38 +131,33 @@ public class QR_CodeService {
     }
 
     public MessageResponse scanQRCode(ScanQR_CodeRequest qrCode) {
-        // find QR code
         Optional<QR_Code> qr_code = qr_codeRepository.findByQrCode(qrCode.getQrCode());
         if (qr_code.isEmpty()) {
             return new MessageResponse("Kod QR nie istnieje!", false);
         }
 
-        // check if qr code was already scanned
         if (qr_code.get().isScanned()) {
             return new MessageResponse("Kod QR został już zeskanowany!", false);
         }
 
-        // check if field game is activated
         FieldGame fieldGame = qr_code.get().getFieldGame();
         if (fieldGame == null) {
             return new MessageResponse("Nie znaleziono gry terenowej.", false);
         }
 
-        if(!fieldGame.getIsActivated()){
-            return new MessageResponse("Gra terenowa nie jest aktywna.", false);
+        if(!fieldGame.getStatus().equals(FieldGameStatus.IN_PROGRESS)) {
+            return new MessageResponse("Gra terenowa nie jest aktywna lub została zakończona.", false);
         }
 
         qr_code.get().setScanned(true);
         qr_codeRepository.save(qr_code.get());
 
-        // find scout
-        List<ScoutInTeam> scoutInTeam = scoutInTeamRepository.findByScoutId(qrCode.getScoutId());
-        if (scoutInTeam.isEmpty()) {
-            return new MessageResponse("Nie znaleziono harcerza w drużynie.", false);
-        }
-        ScoutInTeam scout = scoutInTeam.getFirst();
 
-        // save scan
+        User scout = userService.getUserById(qrCode.getScoutId());
+        if (scout == null) {
+            return new MessageResponse("Nie odnaleziono takiego harcerza.", false);
+        }
+
         QR_Scan qr_scan = new QR_Scan();
         qr_scan.setQrCode(qr_code.get());
         qr_scan.setPoints(qr_code.get().getPoints());

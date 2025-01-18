@@ -78,6 +78,23 @@ public class TeamController {
         return ResponseEntity.ok(new MessageResponse(message, true));
     }
 
+    @GetMapping("/getAllTeams")
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
+        return ResponseEntity.ok(teamService.getAllTeams().stream().map(team -> TeamDTO.builder()
+                .id(team.getId())
+                .name(team.getName())
+                .joinCode(team.getJoinCode())
+                .teamLeaderId(team.getTeamLeader().getId())
+                .teamLeaderName(team.getTeamLeader().getFirstName() + " " + team.getTeamLeader().getLastName())
+                .build()).toList());
+    }
+
+    @GetMapping("/getTeamById/{teamId}")
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable Long teamId) {
+        Team team = teamService.getTeamById(teamId);
+        return getTeamResponseResponseEntity(team);
+    }
+
     // PRIVATE METHODS
     private ResponseEntity<TeamDTO> getTeamResponseResponseEntity(Team team) {
         if(team == null) {

@@ -31,6 +31,7 @@ public class UserService {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
                 .build();
     }
 
@@ -54,5 +55,9 @@ public class UserService {
         }
         userRepository.delete(user);
         return new MessageResponse("Użytkownik został usunięty.", true);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

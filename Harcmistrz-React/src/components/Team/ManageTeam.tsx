@@ -16,6 +16,7 @@ import { ButtonContainer } from "../shared/button-container";
 
 const ManageTeam = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>();
+    const userRole = localStorage.getItem('role');
     const API_BASE_URL = useApi();
     const { teamId } = useParams<{ teamId: string }>();
     const navigate = useNavigate();
@@ -63,7 +64,7 @@ const ManageTeam = () => {
                 <WhiteBox>
                     <SharedH2>Zarządzaj zespołem</SharedH2>
                     <ButtonContainer>
-                        <YellowButton onClick={() => {navigate("/edit-team")}}>Zmień nazwę zespołu</YellowButton>
+                        <YellowButton onClick={() => {navigate(`/edit-team/${teamId}`)}}>Zmień nazwę zespołu</YellowButton>
                         <RedButton onClick={() => {handleDeleteTeam()}}>Usuń zespół</RedButton>
                     </ButtonContainer>
                 </WhiteBox>
@@ -92,7 +93,8 @@ const ManageTeam = () => {
                         </tbody>
                     </table>                
                     </WhiteBox>
-                <ReturnButton to="/dashboard">Wróć do panelu głównego</ReturnButton>
+                {userRole === "TEAM_LEADER" && <ReturnButton to="/dashboard">Wróć do panelu głównego</ReturnButton>}
+                {userRole === "ADMIN" && <ReturnButton to="/manage-teams">Wróć do zarządzania drużynami</ReturnButton>}
             </WhiteBoxColumn>
         </MainBox>
     );

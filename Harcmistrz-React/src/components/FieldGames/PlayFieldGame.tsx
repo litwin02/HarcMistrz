@@ -13,17 +13,19 @@ import { MessageResponse } from "../Models/MessageResponse";
 import { useApi } from "../../ApiContext";
 import { useParams } from "react-router-dom";
 import { Message } from "../shared/message";
+import { ReturnButton } from "../shared/shared-return-button";
 
 const PlayFieldGame = () => {
     const API_BASE_URL = useApi();
     const { fieldGameId } = useParams<{ fieldGameId: string }>();
+    const { eventId } = useParams<{ eventId: string }>();
 
     const [points, setPoints] = useState<number>(0);
     const [message, setMessage] = useState<MessageResponse>();
 
     // Inicjalizacja skanera w momencie, gdy element DOM istnieje
     useEffect(() => {
-        getPoints();
+        
         const scanner = new Html5QrcodeScanner(
             "qr-reader",
             { fps: 10, qrbox: 250 },
@@ -40,7 +42,7 @@ const PlayFieldGame = () => {
                 };
                 const response = await ScanQRCode(API_BASE_URL, scanRequest);
                 setMessage(response);
-
+                getPoints();
             }
         }
 
@@ -81,6 +83,7 @@ const PlayFieldGame = () => {
                     `}</style>
                 </WhiteBox>
                 <div id="qr-reader" className="mt-4 bg-white lg:w-1/2 md:w-full sm:full"></div>
+                <ReturnButton to={`/event-details/${eventId}`}>Wróć na stronę wydarzenia</ReturnButton>
             </WhiteBoxColumn>
 
         </MainBox>

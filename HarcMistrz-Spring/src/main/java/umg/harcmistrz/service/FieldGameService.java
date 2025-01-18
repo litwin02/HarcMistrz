@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import umg.harcmistrz.Models.FieldGame;
+import umg.harcmistrz.Models.FieldGameStatus;
 import umg.harcmistrz.dto.FieldGameDTO;
 import umg.harcmistrz.dto.MessageResponse;
 import umg.harcmistrz.repository.FieldGameRepository;
@@ -31,7 +32,7 @@ public class FieldGameService {
         FieldGame fieldGame = new FieldGame();
         fieldGame.setName(newFieldGameRequest.getName());
         fieldGame.setDescription(newFieldGameRequest.getDescription());
-        fieldGame.setIsActivated(false);
+        fieldGame.setStatus(FieldGameStatus.NOT_STARTED);
         fieldGame.setEvent(eventService.getEventById(newFieldGameRequest.getEventId()));
         fieldGameRepository.save(fieldGame);
     }
@@ -65,21 +66,42 @@ public class FieldGameService {
 
     public MessageResponse activateFieldGame(Long id) {
         FieldGame fieldGame = fieldGameRepository.findById(id).orElse(null);
-        if (fieldGame != null) {
-            fieldGame.setIsActivated(true);
+
+        if (fieldGame == null) {
+            return new MessageResponse("Nie udało się znaleźć gry terenowej!", false);
+        }
+
+        if(fieldGame.getStatus() == FieldGameStatus.NOT_STARTED) {
+            fieldGame.setStatus(FieldGameStatus.IN_PROGRESS);
             fieldGameRepository.save(fieldGame);
             return new MessageResponse("Aktywowano grę terenową!", true);
         }
-        return new MessageResponse("Nie udało się aktywować gry terenowej!", false);
+
+        if(fieldGame.getStatus() == FieldGameStatus.IN_PROGRESS){
+            return new MessageResponse("Gra terenowa jest już aktywna!", false);
+        }
+
+        return new MessageResponse("Gra terenowa już się odbyła i nie można jej ponownie aktywować.", false);
+
     }
 
     public MessageResponse deactivateFieldGame(Long id) {
         FieldGame fieldGame = fieldGameRepository.findById(id).orElse(null);
-        if (fieldGame != null) {
-            fieldGame.setIsActivated(false);
+
+        if(fieldGame == null) {
+            return new MessageResponse("Nie udało się znaleźć gry terenowej!", false);
+        }
+
+        if(fieldGame.getStatus() == FieldGameStatus.IN_PROGRESS){
+            fieldGame.setStatus(FieldGameStatus.FINISHED);
             fieldGameRepository.save(fieldGame);
             return new MessageResponse("Dezaktywowano grę terenową!", true);
         }
-        return new MessageResponse("Nie udało się dezaktywować gry terenowej!", false);
+
+        if(fieldGame.getStatus() == FieldGameStatus.FINISHED){
+            return new MessageResponse("Gra terenowa jest już zakończona!", false);
+        }
+
+        return new MessageResponse("Gra terenowa nie została jeszcze aktywowana!", false);
     }
 }

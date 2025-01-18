@@ -151,32 +151,34 @@ const UserDashboard = () => {
                     )}
 
                 </WhiteBox>
-                <WhiteBox>
-                    <SharedH2>Wydarzenia na które jesteś zapisany</SharedH2>
+                {team &&
+                    <WhiteBox>
+                        <SharedH2>Wydarzenia na które jesteś zapisany</SharedH2>
 
-                    {events && events.length > 0 &&
-                        <div>
-                            {events.map((event, index) => (
-                                <div key={index} className="mb-5">
-                                    <SharedP><BoldText>Nazwa wydarzenia: </BoldText>{event.name}</SharedP>
-                                    <SharedP><BoldText>Opis: </BoldText>{event.description}</SharedP>
-                                    <SharedP><BoldText>Lokalizacja: </BoldText>{event.location}</SharedP>
-                                    <SharedP><BoldText>Data wydarzenia: </BoldText>{event.date}</SharedP>
-                                    <HorizontalButtonContainer>
-                                        <YellowButton onClick={() => navigate(`/event-details/${event.id}`)}>Szczegóły wydarzenia</YellowButton>
-                                        <RedButton onClick={() => {
-                                            const eventToParticipate = eventsToParticipate?.find(e => e.eventId === event.id);
-                                            if (eventToParticipate) {
-                                                handleUnsubscribe(eventToParticipate.id);
-                                            }
-                                        }}>Wypisz się z wydarzenia</RedButton>
-                                    </HorizontalButtonContainer>
-                                </div>
-                            ))}
-                        </div>
-                    }
-                    <GreenButton onClick={() => navigate(`/available-events/${team?.id}`)}>Przeglądaj wydarzenia</GreenButton>
-                </WhiteBox>
+                        {events && events.length > 0 &&
+                            <div>
+                                {events.map((event, index) => (
+                                    <div key={index} className="mb-5">
+                                        <SharedP><BoldText>Nazwa wydarzenia: </BoldText>{event.name}</SharedP>
+                                        <SharedP><BoldText>Opis: </BoldText>{event.description}</SharedP>
+                                        <SharedP><BoldText>Lokalizacja: </BoldText>{event.location}</SharedP>
+                                        <SharedP><BoldText>Data wydarzenia: </BoldText>{event.date}</SharedP>
+                                        <HorizontalButtonContainer>
+                                            <YellowButton onClick={() => navigate(`/event-details/${event.id}`)}>Szczegóły wydarzenia</YellowButton>
+                                            <RedButton onClick={() => {
+                                                const eventToParticipate = eventsToParticipate?.find(e => e.eventId === event.id);
+                                                if (eventToParticipate) {
+                                                    handleUnsubscribe(eventToParticipate.id);
+                                                }
+                                            }}>Wypisz się z wydarzenia</RedButton>
+                                        </HorizontalButtonContainer>
+                                    </div>
+                                ))}
+                            </div>
+                        }
+                        <GreenButton onClick={() => navigate(`/available-events/${team?.id}`)}>Przeglądaj wydarzenia</GreenButton>
+                    </WhiteBox>
+                }
             </WhiteBoxColumn>
         </MainBox>
 

@@ -103,3 +103,41 @@ export const deleteTeam = async (API_BASE_URL: string, teamId: number): Promise<
         throw e;
     }
 }
+
+export const GetAllTeams = async (API_BASE_URL: string): Promise<BasicTeamResponse[]> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/teams/getAllTeams`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Nie udało się pobrać drużyn");
+        }
+        return await response.json();
+    }
+    catch (e: any) {
+        throw e;
+    }
+}
+
+export const GetTeamById = async (API_BASE_URL: string, teamId: number): Promise<BasicTeamResponse> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/teams/getTeamById/${teamId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Nie udało się pobrać drużyny");
+        }
+        return await response.json();
+    }
+    catch (e: any) {
+        throw e;
+    }
+}

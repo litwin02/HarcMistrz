@@ -133,8 +133,8 @@ const RegisterForm = () => {
                                         type="radio"
                                         className='mr-2'
                                         value="SCOUT"
-                                        checked={user.role === 0}
-                                        onChange={() => setUser({ ...user, role: 0 })}
+                                        checked={user.role === "SCOUT"}
+                                        onChange={() => setUser({ ...user, role: Roles.SCOUT })}
                                     />
                                     Harcerz
                                 </label>
@@ -143,8 +143,8 @@ const RegisterForm = () => {
                                         type="radio"
                                         className='mr-2'
                                         value="TEAM_LEADER"
-                                        checked={user.role === 1}
-                                        onChange={() => setUser({ ...user, role: 1 })}
+                                        checked={user.role === "TEAM_LEADER"}
+                                        onChange={() => setUser({ ...user, role: Roles.TEAM_LEADER })}
                                     />
                                     Drużynowy
                                 </label>
