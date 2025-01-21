@@ -11,6 +11,7 @@ import umg.harcmistrz.Models.ScoutInTeam;
 import umg.harcmistrz.Models.Team;
 import umg.harcmistrz.Models.User;
 import umg.harcmistrz.dto.TeamMemberDTO;
+import umg.harcmistrz.dto.UserDTO;
 import umg.harcmistrz.repository.ScoutInTeamRepository;
 import umg.harcmistrz.repository.TeamRepository;
 import java.util.List;
@@ -137,6 +138,19 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
+    public List<UserDTO> getAllTeamUsers(long teamId) {
+        Team team = getTeamById(teamId);
+        if (team == null) {
+            return null;
+        }
+        List<ScoutInTeam> scoutInTeam = scoutInTeamRepository.findByTeamId(teamId);
+        if (scoutInTeam.isEmpty()) {
+            return null;
+        }
+        return scoutInTeam.stream()
+                .map(s -> userService.getUserDTOById(s.getScout().getId()))
+                .toList();
+    }
     // PRIVATE METHODS
 
     private String generateUniqueJoinCode() {

@@ -15,25 +15,10 @@ services:
     networks:
       - backend
 
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: harcerz
-      MONGO_INITDB_ROOT_PASSWORD: mojehaslo123
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - backend
-
 networks:
   backend:
     driver: bridge
 
 volumes:
   postgres_data:
-    driver: local
-  mongo_data:
     driver: local

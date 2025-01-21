@@ -33,6 +33,7 @@ import AdminDashboard from './components/Admin/admin-dashboard';
 import ManageUsers from './components/Admin/manage-users';
 import ManageTeams from './components/Admin/manage-teams';
 import ManageEvents from './components/Admin/manage-events';
+import ChatComponent from './Messages/ChatComponent';
 
 function App() {
   const router = createBrowserRouter([
@@ -314,6 +315,16 @@ function App() {
         </ProtectedRoute>
       ),
     },
+    {
+      path: "/messages",
+      element: (
+        <ProtectedRoute allowedRoles={["SCOUT", "TEAM_LEADER", "ADMIN"]}>
+          <Layout>
+            <ChatComponent />
+          </Layout>
+        </ProtectedRoute>
+      ),
+    }
 
   ]);
 

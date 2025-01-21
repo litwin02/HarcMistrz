@@ -8,6 +8,25 @@ export interface TeamMember {
     email: string;
 }
 
+export const GetTeamByScoutId = async (API_BASE_URL: string, scoutId: number): Promise<BasicTeamResponse> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/teams/getTeamByScoutId/${scoutId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Nie znaleziono żadnej drużyny!");
+        }
+        return await response.json();
+    }
+    catch (e: any) {
+        throw e;
+    }
+}
+
 export const getTeamMembers = async (API_BASE_URL: string , teamId: number) : Promise<TeamMember[]> => {
     try {
         const response = await fetch(`${API_BASE_URL}/teams/getTeamMembers/${teamId}`, {

@@ -11,4 +11,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findAllBySenderIdAndRecipientIdOrRecipientIdAndSenderIdOrderByTimestampAsc(
             Long senderId, Long recipientId, Long senderId2, Long recipientId2
     );
+
+    List<Message> findAllBySenderIdAndRecipientIdOrderByTimestampAsc(Long senderId, Long recipientId);
 }

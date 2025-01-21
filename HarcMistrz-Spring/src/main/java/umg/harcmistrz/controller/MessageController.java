@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import umg.harcmistrz.Models.User;
 import umg.harcmistrz.dto.MessageDTO;
+import umg.harcmistrz.dto.UserDTO;
 import umg.harcmistrz.requests.NewMessageRequest;
 import umg.harcmistrz.service.MessageService;
 
@@ -35,5 +36,11 @@ public class MessageController {
     public MessageDTO sendMessage(@RequestBody NewMessageRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return messageService.sendMessage(user.getId(), request);
+    }
+
+    @GetMapping("/getUsersToChatWith")
+    public List<UserDTO> getUsersToChatWith() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return messageService.getUsersToChatWith(user.getId());
     }
 }
