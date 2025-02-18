@@ -15,6 +15,7 @@ import umg.harcmistrz.requests.NewEventParticipationRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,15 +45,18 @@ public class EventParticipationService {
         EventParticipation eventParticipation = new EventParticipation();
         try {
             eventParticipation.setScoutInTeam(
-                    scoutInTeamRepository.findByScoutId(newEventParticipationRequest.getScoutId()).getFirst());
+                    scoutInTeamRepository.findByScoutId(newEventParticipationRequest.getScoutId()).get(0));
         } catch (Exception e) {
             return new MessageResponse("Nie znaleziono harcerza w drużynie.", false);
         }
-        try {
-            eventParticipation.setEvent(eventRepository.findById(newEventParticipationRequest.getEventId()).orElse(null));
-        } catch (Exception e) {
+
+        Optional<Event> optionalEvent = eventRepository.findById(newEventParticipationRequest.getEventId());
+
+        if(optionalEvent.isEmpty()){
             return new MessageResponse("Nie znaleziono wydarzenia.", false);
         }
+        eventParticipation.setEvent(optionalEvent.get());
+
         eventParticipationRepository.save(eventParticipation);
 
         return new MessageResponse("Zostałeś dodany do wydarzenia!", true);

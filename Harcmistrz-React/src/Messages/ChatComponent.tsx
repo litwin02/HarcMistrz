@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getConversation, getUsersToChatWith, Message, sendMessage, UserDTO } from "../components/API/messages";
 import { MainBox } from "../components/shared/main-box";
 import { useApi } from "../ApiContext";
+import { MainPageHeader } from "../components/shared/main-page-header";
 
 const ChatComponent = () => {
     const [usersList, setUsersList] = useState<UserDTO[]>([]);
@@ -63,10 +64,9 @@ const ChatComponent = () => {
 
     return (
         <MainBox>
-        {/* Główny kontener strony (wyśrodkowany + maks. szerokość) */}
+        <MainPageHeader>Chat</MainPageHeader>
         <div className="mx-auto w-full max-w-screen-md p-4 flex flex-col md:flex-row gap-4">
           
-          {/* LEWA SEKCJA: Lista użytkowników */}
           <div className="w-full md:w-64 bg-white rounded-lg shadow-md">
             <h3 className="p-4 text-lg font-semibold border-b">
               Lista użytkowników
@@ -87,23 +87,22 @@ const ChatComponent = () => {
                 <span className="font-medium">
                   {user.firstName} {user.lastName}
                 </span>
-                <span className="text-sm text-gray-500 ml-2">({user.role})</span>
+                <span className="ml-2 text-sm text-gray-500">
+                  {user.role === 'TEAM_LEADER' ? 'Drużynowy' : user.role === 'ADMIN' ? 'Admin' : user.role === 'SCOUT' ? 'Harcerz' : user.role}
+                </span>
               </div>
             ))}
           </div>
   
-          {/* PRAWA SEKCJA: Okno czatu */}
           <div className="flex-1 bg-white rounded-lg shadow-md flex flex-col">
             {selectedUser ? (
               <>
-                {/* Nagłówek (użytkownik) */}
                 <div className="p-4 border-b">
                   <h3 className="text-lg font-semibold">
                     Rozmowa z: {selectedUser.firstName} {selectedUser.lastName}
                   </h3>
                 </div>
   
-                {/* Lista wiadomości (z możliwością przewijania) */}
                 <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
                   {messages.map((msg) => (
                     <div
@@ -130,8 +129,7 @@ const ChatComponent = () => {
                   ))}
                 </div>
   
-                {/* Pole tekstowe + przycisk wysyłania */}
-                <div className="p-4 border-t flex gap-2">
+                <div className="p-4 border-t flex gap-2 lg:flex-row flex-col">
                   <input
                     type="text"
                     placeholder="Wpisz wiadomość"

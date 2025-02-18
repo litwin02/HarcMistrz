@@ -104,7 +104,7 @@ public class QR_ScanService {
         // get the best result
         List<FieldGameResultDTO> results = getResultsForFieldGame(fieldGameId);
         results.sort(Comparator.comparingInt(FieldGameResultDTO::getPoints).reversed());
-        FieldGameResultDTO bestResult = results.getFirst();
+        FieldGameResultDTO bestResult = results.get(0);
 
         boolean hasScoutWon = bestResult != null && bestResult.getScoutId().equals(scoutId);
         if(!hasScoutWon){

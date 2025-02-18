@@ -18,6 +18,7 @@ import { RedButton } from "../shared/red-button";
 import { ReturnButton } from "../shared/shared-return-button";
 import { HorizontalButtonContainer } from "../shared/horizontal-button-container";
 import { CheckWhoScannedCode, QR_Scan } from "../API/qr-code";
+import { FieldGame, FieldGameStatus } from "../API/field-game";
 
 
 const QR_Codes = () => {
@@ -30,7 +31,7 @@ const QR_Codes = () => {
         getFieldGameById(fieldGameId ? fieldGameId : "");
     }, []);
 
-    const [fieldGame, setFieldGame] = useState<FieldGameDTO>();
+    const [fieldGame, setFieldGame] = useState<FieldGame>();
     const getFieldGameById = async (id: string) => {
         try {
             const response = await fetch(`${API_BASE_URL}/fieldGames/getFieldGameById/${id}`, {
@@ -145,11 +146,13 @@ const QR_Codes = () => {
         <MainBox>
             <WhiteBoxColumn>
                 <MainPageHeader>Kody QR gry: <BoldText>{fieldGame?.name}</BoldText></MainPageHeader>
-                <WhiteBox>
+                {fieldGame?.status === FieldGameStatus.NOT_STARTED &&
+                <WhiteBox>   
                     <ButtonContainer>
                         <GreenButton onClick={() => navigate(`/new-qr-code/${eventId}/${fieldGameId}`)}>Dodaj kod QR</GreenButton>
                     </ButtonContainer>
                 </WhiteBox>
+                }
                 <ReturnButton to={`/event/${eventId}`}>Wróć do gier terenowych</ReturnButton>
                 <WhiteBox>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -192,8 +195,12 @@ const QR_Codes = () => {
                                                 Pobierz kod QR
                                             </a>
                                         </GreenButton>
-                                        <YellowButton onClick={() => navigate(`/edit-qr-code/${eventId}/${fieldGameId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</YellowButton>
-                                        <RedButton onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</RedButton>
+                                        {fieldGame?.status === FieldGameStatus.NOT_STARTED && (
+                                        <>
+                                            <YellowButton onClick={() => navigate(`/edit-qr-code/${eventId}/${fieldGameId}/${qrCode.id}`)}>Zmodyfikuj informacje o kodzie</YellowButton>
+                                            <RedButton onClick={() => handleQRCodeDelete(qrCode.qrCode)}>Usuń kod</RedButton>
+                                        </>
+                                        )}
                                     </HorizontalButtonContainer>
                                 )}
                             </div>

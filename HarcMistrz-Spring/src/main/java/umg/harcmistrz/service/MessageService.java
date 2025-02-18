@@ -65,7 +65,7 @@ public class MessageService {
         message.setRecipient(userService.getUserById(request.getRecipientId()));
         message.setMessage(request.getMessage());
         message.setTimestamp(OffsetDateTime.now());
-        messageRepository.save(message);
+        message = messageRepository.save(message);
         return MessageDTO.builder()
                 .id(message.getId())
                 .senderId(message.getSender().getId())

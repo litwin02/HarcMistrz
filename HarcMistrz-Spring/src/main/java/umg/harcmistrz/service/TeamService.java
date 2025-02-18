@@ -77,7 +77,7 @@ public class TeamService {
         if (scoutInTeam.isEmpty()) {
             return null;
         }
-        return scoutInTeam.getFirst().getTeam();
+        return scoutInTeam.get(0).getTeam();
     }
 
     public List<TeamMemberDTO> getTeamMembers(long teamId) {
@@ -108,10 +108,10 @@ public class TeamService {
         if (scoutInTeam.isEmpty()) {
             return "Nie ma takiego harcerza!";
         }
-        if (scoutInTeam.getFirst().getTeam().getId() != teamId) {
+        if (scoutInTeam.get(0).getTeam().getId() != teamId) {
             return "Ten harcerz nie należy do tej drużyny!";
         }
-        scoutInTeamRepository.delete(scoutInTeam.getFirst());
+        scoutInTeamRepository.delete(scoutInTeam.get(0));
         return "Usunięto harcerza z drużyny!";
     }
 
